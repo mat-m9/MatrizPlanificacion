@@ -12,13 +12,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<IdentityContext>(options =>
+builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<IdentityContext>()
+    .AddEntityFrameworkStores<DatabaseContext>()
     .AddDefaultTokenProviders();
 
 

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MatrizPlanificacion
 {
-    public partial class IdentityContext : IdentityDbContext<User>
+    public partial class DatabaseContext : IdentityDbContext<User>
     {
-        public IdentityContext(DbContextOptions<IdentityContext> options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
         }
