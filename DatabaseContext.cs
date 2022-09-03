@@ -24,7 +24,29 @@ namespace MatrizPlanificacion
         public virtual DbSet<User> Usuarios { get; set; } = null!;
         public virtual DbSet<FechaReasignacionIda> FechaReasignacionIdas { get; set; } = null!;
         public virtual DbSet<FechaReasignacionVuelta> FechaReasignacionVueltas { get; set; } = null!;
-    }
 
-    
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.HasPostgresExtension("uuid-ossp");
+            builder.Entity<Preparatoria>()
+                .HasIndex(x => x.IdProcesoCompra)
+                .IsUnique();
+            builder.Entity<Precontractual>()
+                .HasIndex(x => x.IdPreparatoria)
+                .IsUnique();
+            builder.Entity<Contractual>()
+                .HasIndex(x => x.IdPrecontractual)
+                .IsUnique();
+
+            //Hacer para todas las tablas
+            builder.Entity<Precontractual>(o =>
+                o.Property(x => x.IdPrecontractual)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            
+
+            base.OnModelCreating(builder);
+        }
+    }
 }

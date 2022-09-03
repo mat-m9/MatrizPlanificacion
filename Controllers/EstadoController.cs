@@ -19,15 +19,27 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Estado>>> Get()
         {
-            return await context.Estados.ToListAsync();
+            var estados = await context.Estados.ToListAsync();
+            if (!estados.Any())
+                return NotFound();
+            return estados;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<Estado>>> GetEstado(Guid id)
+        {
+            var estado = await context.Estados.Where(e => e.EstadoId.Equals(id)).FirstOrDefaultAsync();
+            if (estado == null)
+                return NotFound();
+            return Ok(estado);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(Estado estado)
         {
-            context.Add(estado);
+            var created = context.Estados.Add(estado);
             await context.SaveChangesAsync();
-            return estado.EstadoId;
+            return CreatedAtAction("GetEstado", new {id = estado.EstadoId}, created.Entity);
         }
 
         [HttpPut("{EstadoId:Guid}")]
@@ -38,7 +50,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(estado);
+            context.Estados.Update(estado);
             await context.SaveChangesAsync();
             return NoContent();
         }
@@ -51,7 +63,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new Estado() { EstadoId = id });
+            var estado = await context.Estados.FindAsync(id);
+            context.Estados.Remove(estado);
             await context.SaveChangesAsync();
             return NoContent();
         }

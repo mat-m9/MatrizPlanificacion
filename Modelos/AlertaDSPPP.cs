@@ -9,9 +9,9 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         public Guid AlertaDSPPPId { get; set; }
 
+        [ForeignKey("ProcesoCompraId")]
         [Required]
         public Guid ProcesoCompraId { get; set; }
-        [ForeignKey("ProcesoCompraId")]
         public ProcesoCompra ProcesoCompra { get; set; }
 
         [Required]

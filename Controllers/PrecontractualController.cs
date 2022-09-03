@@ -27,7 +27,7 @@ namespace MatrizPlanificacion.Controllers
         {
             context.Add(precontractual);
             await context.SaveChangesAsync();
-            return precontractual.PrecontractualId;
+            return precontractual.IdPreparatoria;
         }
 
         [HttpPut("{PrecontractualId:Guid}")]
@@ -51,14 +51,14 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new Precontractual() { PrecontractualId = id });
+            context.Remove(new Precontractual() { IdPrecontractual = id });
             await context.SaveChangesAsync();
             return NoContent();
         }
 
         private async Task<bool> Existe(Guid id)
         {
-            return await context.Precontractuales.AnyAsync(p => p.PrecontractualId == id);
+            return await context.Precontractuales.AnyAsync(p => p.IdPrecontractual == id);
         }
     }
 }

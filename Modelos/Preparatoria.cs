@@ -11,15 +11,12 @@ namespace MatrizPlanificacion.Modelos
         public Guid PreparatoriaId { get; set; }
 
 
-        [Required]
-        [ForeignKey("PreparatoriaPId")]
-        public ProcesoCompra ProcesoCompra { get; set; }
+        [ForeignKey("IdProcesoCompra")]
+        public Guid? IdProcesoCompra { get; set; }
+        public ProcesoCompra? ProcesoCompra { get; set; }
 
-
-
-        public Guid PrecontractualId { get; set; }
-        [ForeignKey("PrecontractualId")]
-        public Precontractual Precontractual { get; set; }
+        [ForeignKey("IdPreparatoria")]
+        public ICollection<Precontractual> Precontractuales { get; set; }
 
         [Display(Name = "Fecha programada de revisión")]
         [DataType(DataType.Date)]

@@ -11,29 +11,24 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         public Guid ProcesoCompraId { get; set; }
 
-        [Required]
-        [ForeignKey("ProcedimientoId")]
-        public Guid ProcedimientoId { get; set; }
-        public ProcedimientoContratacion ProcedimientoContratacion { get; set; }
+        [ForeignKey("IdProcesoCompra")]
+        public ICollection<Preparatoria>? Preparatorias { get; set; }
 
-        [ForeignKey("PreparatoriaPId")]
-        public Guid PreparatoriaPId { get; set; }
-        public Preparatoria Preparatoria { get; set; }
 
         [Required]
-        public Guid EstadoId { get; set; }
         [ForeignKey("EstadoId")]
+        public Guid EstadoId { get; set; }
         public Estado Estado { get; set; }
 
 
         [Required]
-        public Guid EtapaId { get; set; }
         [ForeignKey("EtapaId")]
+        public Guid EtapaId { get; set; }
         public Etapa Etapa { get; set; }
 
         [Required]
-        public Guid PlantaId { get; set; }
         [ForeignKey("PlantaId")]
+        public Guid PlantaId { get; set; }
         public PlantaUnidadArea PlantaUnidadArea { get; set; }
 
         [Required]

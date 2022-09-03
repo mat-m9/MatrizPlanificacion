@@ -9,7 +9,7 @@ namespace MatrizPlanificacion.Modelos
         public Guid EtapaId { get; set; }
 
         [Required]
-        [StringLength(40)]
+        [MaxLength(40)]
         public string tipoEtapa { get; set; }
 
         public ICollection<ProcesoCompra> ProcesoCompras { get; set; }

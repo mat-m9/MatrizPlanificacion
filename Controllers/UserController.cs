@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MatrizPlanificacion.Controllers
-{/*
+{
     [ApiController]
     [Route("Modelos/User")]
     public class UserController : ControllerBase
@@ -31,7 +31,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("{Id:Guid}")]
-        public async Task<ActionResult> Put(Guid id, User user)
+        public async Task<ActionResult> Put(string id, User user)
         {
             var existe = await Existe(id);
 
@@ -44,7 +44,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("{{Id:Guid}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -56,9 +56,9 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.Users.AnyAsync(p => p.Id == id);
         }
-    }*/
+    }
 }

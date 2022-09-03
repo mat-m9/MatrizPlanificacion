@@ -8,16 +8,14 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid PrecontractualId { get; set; }
+        public Guid IdPrecontractual { get; set; }
 
-        [Required]
-        public Guid PreparatoriaId { get; set; }
-        [ForeignKey("PreparatoriaId")]
-        public Preparatoria Preparatoria { get; set; }
+        [ForeignKey("IdPreparatoria")]
+        public Guid? IdPreparatoria { get; set; }
+        public Preparatoria? Preparatoria {get; set; }
 
-        public Guid ContractualId { get; set; }
-        [ForeignKey("ContractualId")]
-        public Contractual Contractual { get; set; }
+        [ForeignKey("IdPrecontractual")]
+        public ICollection<Contractual>? Contractuales { get; set; }
 
         [DataType(DataType.Date)]
         public DateOnly fechaAdjudicacion { get; set; }

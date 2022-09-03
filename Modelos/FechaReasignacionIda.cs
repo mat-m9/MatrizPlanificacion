@@ -12,10 +12,12 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         [ForeignKey("ProcesoId")]
         public Guid ProcesoId { get; set; }
+        public ProcesoCompra? ProcesoCompra {get; set;}
 
         [Required]
         [ForeignKey("AreaId")]
         public Guid AreaId { get; set; }
+        public PlantaUnidadArea? Area { get; set; }
 
         [Required]
         public DateTime fechaIda { get; set; }

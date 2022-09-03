@@ -10,10 +10,9 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         public Guid ContractualId { get; set; }
 
-        [Required]
-        public Guid PrecontractualId { get; set; }
-        [ForeignKey("PrecontractualId")]
-        public Precontractual Precontractual { get; set; }
+        [ForeignKey("IdPrecontractual")]
+        public Guid? IdPrecontractual { get; set; }
+        public Precontractual? Precontractual { get; set; }
 
         [Display(Name = "Fecha de suscripción")]
         [DataType(DataType.Date)]

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/AlertaDSPPP")]
+    [Route("api/AlertaDSPPP")]
     public class AlertaController : ControllerBase
     {
 

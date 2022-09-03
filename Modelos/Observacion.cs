@@ -10,8 +10,8 @@ namespace MatrizPlanificacion.Modelos
         public Guid ObservacionId { get; set; }
 
         [Required]
-        public Guid ProcesoId { get; set; }
         [ForeignKey("ProcesoId")]
+        public Guid ProcesoId { get; set; }
         public ProcesoCompra ProcesoCompra { get; set; }
 
 

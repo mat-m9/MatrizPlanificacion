@@ -30,7 +30,7 @@ namespace MatrizPlanificacion.Controllers
             return preparatoria.PreparatoriaId;
         }
 
-        [HttpPut("{PreparatoriaId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, Preparatoria preparatoria)
         {
             var existe = await Existe(id);
@@ -43,7 +43,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{{PreparatoriaId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
