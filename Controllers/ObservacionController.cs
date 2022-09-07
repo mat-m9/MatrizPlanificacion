@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/Observacion")]
+    [Route("api/AlertaDSPPP")]
     public class ObservacionController : ControllerBase
     {
 
@@ -19,18 +19,31 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Observacion>>> Get()
         {
-            return await context.Observaciones.ToListAsync();
+            var observaciones = await context.Observaciones.ToListAsync();
+            if (!observaciones.Any())
+                return NotFound();
+            return observaciones;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<Observacion>>> GetObservacion(Guid id)
+        {
+            var observacion = await context.Observaciones.Where(e => e.ObservacionId.Equals(id)).FirstOrDefaultAsync();
+            if (observacion == null)
+                return NotFound();
+            return Ok(observacion);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(Observacion observacion)
         {
-            context.Add(observacion);
+            var created = context.Observaciones.Add(observacion);
             await context.SaveChangesAsync();
-            return observacion.ObservacionId;
+            return CreatedAtAction("GetEstado", new { id = observacion.ObservacionId }, created.Entity);
+
         }
 
-        [HttpPut("{ObservacionId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, Observacion observacion)
         {
             var existe = await Existe(id);
@@ -38,12 +51,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(observacion);
+            context.Observaciones.Update(observacion);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{ObservacionId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
@@ -51,7 +64,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new Observacion() { ObservacionId = id });
+            var observacion = await context.Observaciones.FindAsync(id);
+            context.Observaciones.Remove(observacion);
             await context.SaveChangesAsync();
             return NoContent();
         }

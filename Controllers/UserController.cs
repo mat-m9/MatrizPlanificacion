@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/User")]
+    [Route("api/AlertaDSPPP")]
     public class UserController : ControllerBase
     {
 
@@ -19,18 +19,31 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<User>>> Get()
         {
-            return await context.Users.ToListAsync();
+            var users = await context.Users.ToListAsync();
+            if (!users.Any())
+                return NotFound();
+            return users;
+
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<User>>> GetUser(string id)
+        {
+            var user = await context.Users.Where(e => e.Id.Equals(id)).FirstOrDefaultAsync();
+            if (user == null)
+                return NotFound();
+            return Ok(user);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(User user)
+        public async Task<ActionResult<String>> Post(User user)
         {
-            context.Add(user);
+            var created = context.Users.Add(user);
             await context.SaveChangesAsync();
-            return user.Id;
+            return CreatedAtAction("GetUser", new { id = user.Id }, created.Entity);
         }
 
-        [HttpPut("{Id:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(string id, User user)
         {
             var existe = await Existe(id);
@@ -38,12 +51,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(user);
+            context.Users.Update(user);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{Id:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
@@ -51,7 +64,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new User() { Id = id });
+            var user = await context.Users.FindAsync(id);
+            context.Users.Remove(user);
             await context.SaveChangesAsync();
             return NoContent();
         }

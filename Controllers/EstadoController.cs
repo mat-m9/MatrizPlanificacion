@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/Estado")]
+    [Route("api/AlertaDSPPP")]
     public class EstadoController : ControllerBase
     {
 
@@ -42,7 +42,7 @@ namespace MatrizPlanificacion.Controllers
             return CreatedAtAction("GetEstado", new {id = estado.EstadoId}, created.Entity);
         }
 
-        [HttpPut("{EstadoId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, Estado estado)
         {
             var existe = await Existe(id);
@@ -55,7 +55,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{{EstadoId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);

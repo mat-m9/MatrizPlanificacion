@@ -20,18 +20,30 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<AlertaDSPPP>>> Get()
         {
-            return await context.Alertas.ToListAsync();
+            var alertas = await context.Alertas.ToListAsync();
+            if (!alertas.Any())
+                return NotFound();
+            return alertas;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<AlertaDSPPP>>> GetEstado(Guid id)
+        {
+            var alerta = await context.Alertas.Where(e => e.AlertaDSPPPId.Equals(id)).FirstOrDefaultAsync();
+            if (alerta == null)
+                return NotFound();
+            return Ok(alerta);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(AlertaDSPPP alerta)
         {
-            context.Add(alerta);
+            var created = context.Alertas.Add(alerta);
             await context.SaveChangesAsync();
-            return alerta.AlertaDSPPPId;
+            return CreatedAtAction("GetAlerta", new { id = alerta.AlertaDSPPPId }, created.Entity);
         }
 
-        [HttpPut("{AlertaDSPPPId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, AlertaDSPPP alerta)
         {
             var existe = await Existe(id);
@@ -39,12 +51,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(alerta);
+            context.Alertas.Update(alerta);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{AlertaDSPPPId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
@@ -52,7 +64,9 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new AlertaDSPPP() { AlertaDSPPPId = id});
+
+            var alerta = await context.Alertas.FindAsync(id);
+            context.Alertas.Remove(alerta);
             await context.SaveChangesAsync();
             return NoContent();
         }

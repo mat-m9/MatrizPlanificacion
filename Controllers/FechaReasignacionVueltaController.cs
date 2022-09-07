@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/FechaReasignacionVuelta")]
+    [Route("api/AlertaDSPPP")]
     public class FechaReasignacionVueltaController : ControllerBase
     {
 
@@ -19,18 +19,31 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<FechaReasignacionVuelta>>> Get()
         {
-            return await context.FechaReasignacionVueltas.ToListAsync();
+            var fechaVueltas = await context.FechaReasignacionVueltas.ToListAsync();
+            if (!fechaVueltas.Any())
+                return NotFound();
+            return fechaVueltas;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<FechaReasignacionVuelta>>> GetFechaVuelta(Guid id)
+        {
+            var fechaVueltas = await context.FechaReasignacionVueltas.Where(e => e.IdVuelta.Equals(id)).FirstOrDefaultAsync();
+            if (fechaVueltas == null)
+                return NotFound();
+            return Ok(fechaVueltas);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(FechaReasignacionVuelta fechaReasigVuelta)
         {
-            context.Add(fechaReasigVuelta);
+            var created = context.FechaReasignacionVueltas.Add(fechaReasigVuelta);
             await context.SaveChangesAsync();
-            return fechaReasigVuelta.IdVuelta;
+            return CreatedAtAction("GetFechaVuelta", new { id = fechaReasigVuelta.IdVuelta }, created.Entity);
+
         }
 
-        [HttpPut("{IdVuelta:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, FechaReasignacionVuelta fechaReasigVuelta)
         {
             var existe = await Existe(id);
@@ -38,12 +51,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(fechaReasigVuelta);
+            context.FechaReasignacionVueltas.Update(fechaReasigVuelta);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{IdVuelta:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
@@ -51,7 +64,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new FechaReasignacionVuelta() { IdVuelta = id });
+            var fechaVuelta = await context.FechaReasignacionVueltas.FindAsync(id);
+            context.FechaReasignacionVueltas.Remove(fechaVuelta);
             await context.SaveChangesAsync();
             return NoContent();
         }

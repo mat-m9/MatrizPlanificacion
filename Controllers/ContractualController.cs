@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/Contractual")]
+    [Route("api/AlertaDSPPP")]
     public class ContractualController : ControllerBase
     {
 
@@ -19,18 +19,30 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Contractual>>> Get()
         {
-            return await context.Contractuales.ToListAsync();
+            var contractuales = await context.Contractuales.ToListAsync();
+            if (!contractuales.Any())
+                return NotFound();
+            return contractuales;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<Contractual>>> GetContractual(Guid id)
+        {
+            var contractual = await context.Contractuales.Where(e => e.ContractualId.Equals(id)).FirstOrDefaultAsync();
+            if (contractual == null)
+                return NotFound();
+            return Ok(contractual);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(Contractual contractual)
         {
-            context.Add(contractual);
+            var created = context.Contractuales.Add(contractual);
             await context.SaveChangesAsync();
-            return contractual.ContractualId;
+            return CreatedAtAction("GetContractual", new { id = contractual.ContractualId }, created.Entity);
         }
 
-        [HttpPut("{ContractualId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, Contractual contractual)
         {
             var existe = await Existe(id);
@@ -38,12 +50,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(contractual);
+            context.Contractuales.Update(contractual);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{ContractualId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
@@ -51,7 +63,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new Contractual() { ContractualId = id });
+            var contractual = await context.Contractuales.FindAsync(id);
+            context.Contractuales.Remove(contractual);
             await context.SaveChangesAsync();
             return NoContent();
         }

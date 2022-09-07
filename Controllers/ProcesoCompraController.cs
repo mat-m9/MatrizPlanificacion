@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/ProcesoCompra")]
+    [Route("api/AlertaDSPPP")]
     public class ProcesoCompraController : ControllerBase
     {
 
@@ -19,18 +19,31 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> Get()
         {
-            return await context.ProcesoCompras.ToListAsync();
+            var procesos = await context.ProcesoCompras.ToListAsync();
+            if (!procesos.Any())
+                return NotFound();
+            return procesos;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProceso(Guid id)
+        {
+            var proceso = await context.ProcesoCompras.Where(e => e.ProcesoCompraId.Equals(id)).FirstOrDefaultAsync();
+            if (proceso == null)
+                return NotFound();
+            return Ok(proceso);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(ProcesoCompra procesoCompra)
         {
-            context.Add(procesoCompra);
+            var created = context.ProcesoCompras.Add(procesoCompra);
             await context.SaveChangesAsync();
-            return procesoCompra.ProcesoCompraId;
+            return CreatedAtAction("GetProceso", new { id = procesoCompra.ProcesoCompraId }, created.Entity);
+
         }
 
-        [HttpPut("{ProcesoCompraId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, ProcesoCompra procesoCompra)
         {
             var existe = await Existe(id);
@@ -38,12 +51,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(procesoCompra);
+            context.ProcesoCompras.Update(procesoCompra);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{ProcesoCompraId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
@@ -51,7 +64,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new ProcesoCompra() { ProcesoCompraId = id });
+            var proceso = await context.ProcesoCompras.FindAsync(id);
+            context.ProcesoCompras.Remove(proceso);
             await context.SaveChangesAsync();
             return NoContent();
         }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/Preparatoria")]
+    [Route("api/AlertaDSPPP")]
     public class PreparatoriaController : ControllerBase
     {
 
@@ -19,15 +19,28 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Preparatoria>>> Get()
         {
-            return await context.Preparatorias.ToListAsync();
+            var preparatorias = await context.Preparatorias.ToListAsync();
+            if (!preparatorias.Any())
+                return NotFound();
+            return preparatorias;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<Preparatoria>>> GetPreparatoria(Guid id)
+        {
+            var preparatoria = await context.Preparatorias.Where(e => e.PreparatoriaId.Equals(id)).FirstOrDefaultAsync();
+            if (preparatoria == null)
+                return NotFound();
+            return Ok(preparatoria);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(Preparatoria preparatoria)
         {
-            context.Add(preparatoria);
+            var created = context.Preparatorias.Add(preparatoria);
             await context.SaveChangesAsync();
-            return preparatoria.PreparatoriaId;
+            return CreatedAtAction("GetEstado", new { id = preparatoria.PreparatoriaId }, created.Entity);
+
         }
 
         [HttpPut("id")]
@@ -38,7 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(preparatoria);
+            context.Preparatorias.Update(preparatoria);
             await context.SaveChangesAsync();
             return NoContent();
         }
@@ -51,7 +64,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new Preparatoria() { PreparatoriaId = id });
+            var preparatoria = await context.Preparatorias.FindAsync(id);
+            context.Preparatorias.Remove(preparatoria);
             await context.SaveChangesAsync();
             return NoContent();
         }

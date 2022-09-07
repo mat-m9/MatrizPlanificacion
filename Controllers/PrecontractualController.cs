@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/Precontractual")]
+    [Route("api/AlertaDSPPP")]
     public class PrecontractualController : ControllerBase
     {
 
@@ -19,18 +19,30 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Precontractual>>> Get()
         {
-            return await context.Precontractuales.ToListAsync();
+            var precontractuales = await context.Precontractuales.ToListAsync();
+            if (!precontractuales.Any())
+                return NotFound();
+            return precontractuales;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<Precontractual>>> GetPrecontractual(Guid id)
+        {
+            var precontractual = await context.Precontractuales.Where(e => e.IdPrecontractual.Equals(id)).FirstOrDefaultAsync();
+            if (precontractual == null)
+                return NotFound();
+            return Ok(precontractual);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(Precontractual precontractual)
         {
-            context.Add(precontractual);
+            var created = context.Precontractuales.Add(precontractual);
             await context.SaveChangesAsync();
-            return precontractual.IdPreparatoria;
+            return CreatedAtAction("GetPrecontractual", new { id = precontractual.IdPrecontractual }, created.Entity);
         }
 
-        [HttpPut("{PrecontractualId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, Precontractual precontractual)
         {
             var existe = await Existe(id);
@@ -38,12 +50,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(precontractual);
+            context.Precontractuales.Update(precontractual);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{PrecontractualId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
@@ -51,7 +63,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new Precontractual() { IdPrecontractual = id });
+            var precontactual = await context.Precontractuales.FindAsync(id);
+            context.Precontractuales.Remove(precontactual);
             await context.SaveChangesAsync();
             return NoContent();
         }

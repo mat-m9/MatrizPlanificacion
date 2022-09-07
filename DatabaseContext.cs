@@ -27,6 +27,7 @@ namespace MatrizPlanificacion
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //Relaciones 1-1
             builder.HasPostgresExtension("uuid-ossp");
             builder.Entity<Preparatoria>()
                 .HasIndex(x => x.IdProcesoCompra)
@@ -38,13 +39,68 @@ namespace MatrizPlanificacion
                 .HasIndex(x => x.IdPrecontractual)
                 .IsUnique();
 
-            //Hacer para todas las tablas
+
+            //Generación uuid tablas modelo
+            builder.Entity<AlertaDSPPP>(o =>
+                o.Property(x => x.AlertaDSPPPId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<Contractual>(o =>
+                o.Property(x => x.IdPrecontractual)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<Estado>(o =>
+                o.Property(x => x.EstadoId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<Etapa>(o =>
+                o.Property(x => x.EtapaId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<FechaReasignacionIda>(o =>
+                o.Property(x => x.IdIda)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<FechaReasignacionVuelta>(o =>
+                o.Property(x => x.IdVuelta)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<Observacion>(o =>
+                o.Property(x => x.ObservacionId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<PlantaUnidadArea>(o =>
+                o.Property(x => x.PlantaUnidadAreaId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
             builder.Entity<Precontractual>(o =>
                 o.Property(x => x.IdPrecontractual)
                 .HasDefaultValue("uuid_generate_v4()")
                 .ValueGeneratedOnAdd());
 
-            
+            builder.Entity<Preparatoria>(o =>
+                o.Property(x => x.PreparatoriaId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<ProcedimientoContratacion>(o =>
+                o.Property(x => x.ProcedimientoContratacionId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<ProcesoCompra>(o =>
+                o.Property(x => x.ProcesoCompraId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
 
             base.OnModelCreating(builder);
         }

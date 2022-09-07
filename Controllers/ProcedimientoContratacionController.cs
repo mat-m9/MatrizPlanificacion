@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("Modelos/ProcedimientoContratacion")]
+    [Route("api/AlertaDSPPP")]
     public class ProcedimientoContratacionController : ControllerBase
     {
 
@@ -19,18 +19,31 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<ProcedimientoContratacion>>> Get()
         {
-            return await context.ProcedimientoContrataciones.ToListAsync();
+            var procedimientos = await context.ProcedimientoContrataciones.ToListAsync();
+            if (!procedimientos.Any())
+                return NotFound();
+            return procedimientos;
+        }
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ICollection<ProcedimientoContratacion>>> GetProcedimiento(Guid id)
+        {
+            var procedimiento = await context.ProcedimientoContrataciones.Where(e => e.ProcedimientoContratacionId.Equals(id)).FirstOrDefaultAsync();
+            if (procedimiento == null)
+                return NotFound();
+            return Ok(procedimiento);
         }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Post(ProcedimientoContratacion procedimientoContratacion)
         {
-            context.Add(procedimientoContratacion);
+            var created = context.ProcedimientoContrataciones.Add(procedimientoContratacion);
             await context.SaveChangesAsync();
-            return procedimientoContratacion.ProcedimientoContratacionId;
+            return CreatedAtAction("GetProcedimiento", new { id = procedimientoContratacion.ProcedimientoContratacionId }, created.Entity);
+
         }
 
-        [HttpPut("{ProcedimientoContratacionId:Guid}")]
+        [HttpPut("id")]
         public async Task<ActionResult> Put(Guid id, ProcedimientoContratacion procedimientoContratacion)
         {
             var existe = await Existe(id);
@@ -38,12 +51,12 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Update(procedimientoContratacion);
+            context.ProcedimientoContrataciones.Update(procedimientoContratacion);
             await context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpDelete("{{ProcedimientoContratacionId:Guid}")]
+        [HttpDelete("id")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var existe = await Existe(id);
@@ -51,7 +64,8 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
-            context.Remove(new ProcedimientoContratacion() { ProcedimientoContratacionId = id });
+            var procedimiento = await context.ProcedimientoContrataciones.FindAsync(id);
+            context.ProcedimientoContrataciones.Remove(procedimiento);
             await context.SaveChangesAsync();
             return NoContent();
         }
