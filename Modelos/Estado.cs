@@ -6,7 +6,7 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid EstadoId { get; set; }
+        public string EstadoId { get; set; }
 
         [Required]
         public string tipoEstado { get; set; }

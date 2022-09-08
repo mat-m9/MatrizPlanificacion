@@ -6,7 +6,7 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid EtapaId { get; set; }
+        public string EtapaId { get; set; }
 
         [Required]
         [MaxLength(40)]

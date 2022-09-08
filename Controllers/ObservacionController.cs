@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<Observacion>>> GetObservacion(Guid id)
+        public async Task<ActionResult<ICollection<Observacion>>> GetObservacion(string id)
         {
             var observacion = await context.Observaciones.Where(e => e.ObservacionId.Equals(id)).FirstOrDefaultAsync();
             if (observacion == null)
@@ -35,7 +35,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(Observacion observacion)
+        public async Task<ActionResult<string>> Post(Observacion observacion)
         {
             var created = context.Observaciones.Add(observacion);
             await context.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, Observacion observacion)
+        public async Task<ActionResult> Put(string id, Observacion observacion)
         {
             var existe = await Existe(id);
 
@@ -57,7 +57,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -70,7 +70,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.Observaciones.AnyAsync(p => p.ObservacionId == id);
         }

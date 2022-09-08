@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<Precontractual>>> GetPrecontractual(Guid id)
+        public async Task<ActionResult<ICollection<Precontractual>>> GetPrecontractual(string id)
         {
             var precontractual = await context.Precontractuales.Where(e => e.IdPrecontractual.Equals(id)).FirstOrDefaultAsync();
             if (precontractual == null)
@@ -35,7 +35,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(Precontractual precontractual)
+        public async Task<ActionResult<string>> Post(Precontractual precontractual)
         {
             var created = context.Precontractuales.Add(precontractual);
             await context.SaveChangesAsync();
@@ -43,7 +43,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, Precontractual precontractual)
+        public async Task<ActionResult> Put(string id, Precontractual precontractual)
         {
             var existe = await Existe(id);
 
@@ -56,7 +56,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -69,7 +69,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.Precontractuales.AnyAsync(p => p.IdPrecontractual == id);
         }

@@ -27,7 +27,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<AlertaDSPPP>>> GetEstado(Guid id)
+        public async Task<ActionResult<ICollection<AlertaDSPPP>>> GetEstado(string id)
         {
             var alerta = await context.Alertas.Where(e => e.AlertaDSPPPId.Equals(id)).FirstOrDefaultAsync();
             if (alerta == null)
@@ -36,7 +36,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(AlertaDSPPP alerta)
+        public async Task<ActionResult<string>> Post(AlertaDSPPP alerta)
         {
             var created = context.Alertas.Add(alerta);
             await context.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, AlertaDSPPP alerta)
+        public async Task<ActionResult> Put(string id, AlertaDSPPP alerta)
         {
             var existe = await Existe(id);
 
@@ -57,7 +57,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -71,7 +71,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.Alertas.AnyAsync(p => p.AlertaDSPPPId == id);
         }

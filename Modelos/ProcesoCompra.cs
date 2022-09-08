@@ -9,7 +9,7 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid ProcesoCompraId { get; set; }
+        public string ProcesoCompraId { get; set; }
 
         [ForeignKey("IdProcesoCompra")]
         public ICollection<Preparatoria>? Preparatorias { get; set; }
@@ -17,18 +17,18 @@ namespace MatrizPlanificacion.Modelos
 
         [Required]
         [ForeignKey("EstadoId")]
-        public Guid EstadoId { get; set; }
+        public string EstadoId { get; set; }
         public Estado Estado { get; set; }
 
 
         [Required]
         [ForeignKey("EtapaId")]
-        public Guid EtapaId { get; set; }
+        public string EtapaId { get; set; }
         public Etapa Etapa { get; set; }
 
         [Required]
         [ForeignKey("PlantaId")]
-        public Guid PlantaId { get; set; }
+        public string PlantaId { get; set; }
         public PlantaUnidadArea PlantaUnidadArea { get; set; }
 
         [Required]

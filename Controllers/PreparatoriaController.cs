@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<Preparatoria>>> GetPreparatoria(Guid id)
+        public async Task<ActionResult<ICollection<Preparatoria>>> GetPreparatoria(string id)
         {
             var preparatoria = await context.Preparatorias.Where(e => e.PreparatoriaId.Equals(id)).FirstOrDefaultAsync();
             if (preparatoria == null)
@@ -35,7 +35,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(Preparatoria preparatoria)
+        public async Task<ActionResult<string>> Post(Preparatoria preparatoria)
         {
             var created = context.Preparatorias.Add(preparatoria);
             await context.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, Preparatoria preparatoria)
+        public async Task<ActionResult> Put(string id, Preparatoria preparatoria)
         {
             var existe = await Existe(id);
 
@@ -57,7 +57,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -70,7 +70,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.Preparatorias.AnyAsync(p => p.PreparatoriaId == id);
         }

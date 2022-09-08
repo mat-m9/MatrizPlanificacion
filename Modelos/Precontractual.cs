@@ -8,10 +8,10 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid IdPrecontractual { get; set; }
+        public string IdPrecontractual { get; set; }
 
         [ForeignKey("IdPreparatoria")]
-        public Guid? IdPreparatoria { get; set; }
+        public string? IdPreparatoria { get; set; }
         public Preparatoria? Preparatoria {get; set; }
 
         [ForeignKey("IdPrecontractual")]

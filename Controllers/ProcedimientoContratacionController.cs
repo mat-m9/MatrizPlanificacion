@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<ProcedimientoContratacion>>> GetProcedimiento(Guid id)
+        public async Task<ActionResult<ICollection<ProcedimientoContratacion>>> GetProcedimiento(string id)
         {
             var procedimiento = await context.ProcedimientoContrataciones.Where(e => e.ProcedimientoContratacionId.Equals(id)).FirstOrDefaultAsync();
             if (procedimiento == null)
@@ -35,7 +35,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(ProcedimientoContratacion procedimientoContratacion)
+        public async Task<ActionResult<string>> Post(ProcedimientoContratacion procedimientoContratacion)
         {
             var created = context.ProcedimientoContrataciones.Add(procedimientoContratacion);
             await context.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, ProcedimientoContratacion procedimientoContratacion)
+        public async Task<ActionResult> Put(string id, ProcedimientoContratacion procedimientoContratacion)
         {
             var existe = await Existe(id);
 
@@ -57,7 +57,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -70,7 +70,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.ProcedimientoContrataciones.AnyAsync(p => p.ProcedimientoContratacionId == id);
         }

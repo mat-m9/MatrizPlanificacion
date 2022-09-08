@@ -7,11 +7,11 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid AlertaDSPPPId { get; set; }
+        public string AlertaDSPPPId { get; set; }
 
         [ForeignKey("ProcesoCompraId")]
         [Required]
-        public Guid ProcesoCompraId { get; set; }
+        public string ProcesoCompraId { get; set; }
         public ProcesoCompra ProcesoCompra { get; set; }
 
         [Required]

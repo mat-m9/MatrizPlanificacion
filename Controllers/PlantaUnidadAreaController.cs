@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> GetArea(Guid id)
+        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> GetArea(string id)
         {
             var area = await context.PlantaUnidadAreas.Where(e => e.PlantaUnidadAreaId.Equals(id)).FirstOrDefaultAsync();
             if (area == null)
@@ -35,16 +35,16 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(PlantaUnidadArea plantaUnidadArea)
+        public async Task<ActionResult<string>> Post(PlantaUnidadArea plantaUnidadArea)
         {
-            var created = context.PlantaUnidadAreas.Add(plantaUnidadArea));
+            var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
             await context.SaveChangesAsync();
             return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
 
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, PlantaUnidadArea plantaUnidadArea)
+        public async Task<ActionResult> Put(string id, PlantaUnidadArea plantaUnidadArea)
         {
             var existe = await Existe(id);
 
@@ -57,7 +57,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -70,7 +70,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.PlantaUnidadAreas.AnyAsync(p => p.PlantaUnidadAreaId == id);
         }

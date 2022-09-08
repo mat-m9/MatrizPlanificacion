@@ -7,16 +7,16 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid IdIda { get; set; }
+        public string IdIda { get; set; }
 
         [Required]
         [ForeignKey("ProcesoId")]
-        public Guid ProcesoId { get; set; }
+        public string ProcesoId { get; set; }
         public ProcesoCompra? ProcesoCompra {get; set;}
 
         [Required]
         [ForeignKey("AreaId")]
-        public Guid AreaId { get; set; }
+        public string AreaId { get; set; }
         public PlantaUnidadArea? Area { get; set; }
 
         [Required]

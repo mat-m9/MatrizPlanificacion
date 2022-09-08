@@ -7,7 +7,7 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         [Required]
-        public Guid ProcedimientoContratacionId { get; set; }
+        public string ProcedimientoContratacionId { get; set; }
 
 
         [ForeignKey("ProcedimientoId")]

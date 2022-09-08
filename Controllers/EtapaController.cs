@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<Etapa>>> GetEtapa(Guid id)
+        public async Task<ActionResult<ICollection<Etapa>>> GetEtapa(string id)
         {
             var etapa = await context.Etapas.Where(e => e.EtapaId.Equals(id)).FirstOrDefaultAsync();
             if (etapa == null)
@@ -35,7 +35,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(Etapa etapa)
+        public async Task<ActionResult<string>> Post(Etapa etapa)
         {
             var created = context.Etapas.Add(etapa);
             await context.SaveChangesAsync();
@@ -43,7 +43,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, Etapa etapa)
+        public async Task<ActionResult> Put(string id, Etapa etapa)
         {
             var existe = await Existe(id);
 
@@ -56,7 +56,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -68,7 +68,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.Etapas.AnyAsync(p => p.EtapaId == id);
         }

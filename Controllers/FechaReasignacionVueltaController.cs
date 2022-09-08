@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<FechaReasignacionVuelta>>> GetFechaVuelta(Guid id)
+        public async Task<ActionResult<ICollection<FechaReasignacionVuelta>>> GetFechaVuelta(string id)
         {
             var fechaVueltas = await context.FechaReasignacionVueltas.Where(e => e.IdVuelta.Equals(id)).FirstOrDefaultAsync();
             if (fechaVueltas == null)
@@ -35,7 +35,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(FechaReasignacionVuelta fechaReasigVuelta)
+        public async Task<ActionResult<string>> Post(FechaReasignacionVuelta fechaReasigVuelta)
         {
             var created = context.FechaReasignacionVueltas.Add(fechaReasigVuelta);
             await context.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, FechaReasignacionVuelta fechaReasigVuelta)
+        public async Task<ActionResult> Put(string id, FechaReasignacionVuelta fechaReasigVuelta)
         {
             var existe = await Existe(id);
 
@@ -57,7 +57,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -70,7 +70,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.FechaReasignacionVueltas.AnyAsync(p => p.IdVuelta == id);
         }

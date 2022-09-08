@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<Estado>>> GetEstado(Guid id)
+        public async Task<ActionResult<ICollection<Estado>>> GetEstado(string id)
         {
             var estado = await context.Estados.Where(e => e.EstadoId.Equals(id)).FirstOrDefaultAsync();
             if (estado == null)
@@ -35,7 +35,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Post(Estado estado)
+        public async Task<ActionResult<string>> Post(Estado estado)
         {
             var created = context.Estados.Add(estado);
             await context.SaveChangesAsync();
@@ -43,7 +43,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(Guid id, Estado estado)
+        public async Task<ActionResult> Put(string id, Estado estado)
         {
             var existe = await Existe(id);
 
@@ -56,7 +56,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(string id)
         {
             var existe = await Existe(id);
 
@@ -69,7 +69,7 @@ namespace MatrizPlanificacion.Controllers
             return NoContent();
         }
 
-        private async Task<bool> Existe(Guid id)
+        private async Task<bool> Existe(string id)
         {
             return await context.Estados.AnyAsync(p => p.EstadoId == id);
         }
