@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            alerta.AlertaDSPPPId = id;
             context.Alertas.Update(alerta);
             await context.SaveChangesAsync();
             return NoContent();

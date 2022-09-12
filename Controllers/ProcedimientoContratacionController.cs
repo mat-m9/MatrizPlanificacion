@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            procedimientoContratacion.ProcedimientoContratacionId = id;
             context.ProcedimientoContrataciones.Update(procedimientoContratacion);
             await context.SaveChangesAsync();
             return NoContent();

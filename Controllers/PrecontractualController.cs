@@ -50,6 +50,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            precontractual.IdPrecontractual = id;
             context.Precontractuales.Update(precontractual);
             await context.SaveChangesAsync();
             return NoContent();

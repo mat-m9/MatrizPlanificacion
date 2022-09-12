@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            plantaUnidadArea.PlantaUnidadAreaId = id;
             context.PlantaUnidadAreas.Update(plantaUnidadArea);
             await context.SaveChangesAsync();
             return NoContent();

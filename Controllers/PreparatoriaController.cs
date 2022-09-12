@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            preparatoria.PreparatoriaId = id;
             context.Preparatorias.Update(preparatoria);
             await context.SaveChangesAsync();
             return NoContent();

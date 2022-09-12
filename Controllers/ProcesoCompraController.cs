@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            procesoCompra.ProcesoCompraId = id;
             context.ProcesoCompras.Update(procesoCompra);
             await context.SaveChangesAsync();
             return NoContent();

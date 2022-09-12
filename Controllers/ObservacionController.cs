@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            observacion.ObservacionId = id;
             context.Observaciones.Update(observacion);
             await context.SaveChangesAsync();
             return NoContent();

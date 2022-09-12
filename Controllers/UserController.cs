@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            user.Id = id;
             context.Users.Update(user);
             await context.SaveChangesAsync();
             return NoContent();

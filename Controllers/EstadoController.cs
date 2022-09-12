@@ -50,6 +50,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            estado.EstadoId = id;
             context.Estados.Update(estado);
             await context.SaveChangesAsync();
             return NoContent();

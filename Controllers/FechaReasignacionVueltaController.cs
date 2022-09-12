@@ -51,6 +51,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            fechaReasigVuelta.IdVuelta = id;
             context.FechaReasignacionVueltas.Update(fechaReasigVuelta);
             await context.SaveChangesAsync();
             return NoContent();

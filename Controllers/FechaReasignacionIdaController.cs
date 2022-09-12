@@ -50,6 +50,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            fechasReasigIda.IdIda = id;
             context.FechaReasignacionIdas.Update(fechasReasigIda);
             await context.SaveChangesAsync();
             return NoContent();
