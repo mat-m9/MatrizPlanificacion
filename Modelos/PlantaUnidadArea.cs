@@ -6,8 +6,7 @@ namespace MatrizPlanificacion.Modelos
     public partial class PlantaUnidadArea
     {
         [Key]
-        [Required]
-        public string PlantaUnidadAreaId { get; set; }
+        public string? PlantaUnidadAreaId { get; set; }
 
         [ForeignKey("PadreId")]
         public string PadreId { get; set; }
@@ -20,10 +19,10 @@ namespace MatrizPlanificacion.Modelos
         public char tipo { get; set; }
 
 
-        public ICollection<PlantaUnidadArea> PlantaUnidadAreas { get; set; }
+        public ICollection<PlantaUnidadArea>? PlantaUnidadAreas { get; set; }
 
-        public ICollection<ProcesoCompra> ProcesoCompras { get; set; }
+        public ICollection<ProcesoCompra>? ProcesoCompras { get; set; }
 
-        public ICollection<User> Usuarios { get; set; }
+        public ICollection<User>? Usuarios { get; set; }
     }
 }

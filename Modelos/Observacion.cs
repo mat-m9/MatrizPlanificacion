@@ -6,13 +6,12 @@ namespace MatrizPlanificacion.Modelos
     public class Observacion
     {
         [Key]
-        [Required]
-        public string ObservacionId { get; set; }
+        public string? ObservacionId { get; set; }
 
         [Required]
         [ForeignKey("ProcesoId")]
         public string ProcesoId { get; set; }
-        public ProcesoCompra ProcesoCompra { get; set; }
+        public ProcesoCompra Proceso { get; set; }
 
 
         [Required]

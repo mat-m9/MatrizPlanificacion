@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("api/AlertaDSPPP")]
+    [Route("api/[controller]")]
     public class AlertaController : ControllerBase
     {
 
@@ -27,7 +27,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<AlertaDSPPP>>> GetEstado(string id)
+        public async Task<ActionResult<ICollection<AlertaDSPPP>>> GetAlerta(string id)
         {
             var alerta = await context.Alertas.Where(e => e.AlertaDSPPPId.Equals(id)).FirstOrDefaultAsync();
             if (alerta == null)

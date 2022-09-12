@@ -6,13 +6,12 @@ namespace MatrizPlanificacion.Modelos
     public partial class FechaReasignacionIda
     {
         [Key]
-        [Required]
-        public string IdIda { get; set; }
+        public string? IdIda { get; set; }
 
         [Required]
         [ForeignKey("ProcesoId")]
         public string ProcesoId { get; set; }
-        public ProcesoCompra? ProcesoCompra {get; set;}
+        public ProcesoCompra? Proceso {get; set;}
 
         [Required]
         [ForeignKey("AreaId")]
@@ -22,4 +21,5 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         public DateTime fechaIda { get; set; }
     }
+
 }

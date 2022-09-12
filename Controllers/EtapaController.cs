@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
-    [Route("api/AlertaDSPPP")]
+    [Route("api/[controller]")]
     public class EtapaController : ControllerBase
     {
 
@@ -50,6 +50,7 @@ namespace MatrizPlanificacion.Controllers
             if (!existe)
                 return NotFound();
 
+            etapa.EtapaId = id;
             context.Etapas.Update(etapa);
             await context.SaveChangesAsync();
             return NoContent();

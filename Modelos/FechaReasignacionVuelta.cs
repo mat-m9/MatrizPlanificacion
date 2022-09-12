@@ -6,13 +6,12 @@ namespace MatrizPlanificacion.Modelos
     public partial class FechaReasignacionVuelta
     {
         [Key]
-        [Required]
-        public string IdVuelta { get; set; }
+        public string? IdVuelta { get; set; }
 
         [Required]
         [ForeignKey("ProcesoId")]
         public string ProcesoId { get; set; }
-        public ProcesoCompra ProcesoCompra { get; set; }
+        public ProcesoCompra Proceso { get; set; }
 
         [Required]
         [ForeignKey("AreaId")]

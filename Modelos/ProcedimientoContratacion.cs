@@ -6,8 +6,7 @@ namespace MatrizPlanificacion.Modelos
     public partial class ProcedimientoContratacion
     {
         [Key]
-        [Required]
-        public string ProcedimientoContratacionId { get; set; }
+        public string? ProcedimientoContratacionId { get; set; }
 
 
         [ForeignKey("ProcedimientoId")]

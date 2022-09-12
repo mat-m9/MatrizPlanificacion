@@ -7,8 +7,7 @@ namespace MatrizPlanificacion.Modelos
     public partial class Preparatoria
     {
         [Key]
-        [Required]
-        public string PreparatoriaId { get; set; }
+        public string? PreparatoriaId { get; set; }
 
 
         [ForeignKey("IdProcesoCompra")]

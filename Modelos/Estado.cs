@@ -5,12 +5,11 @@ namespace MatrizPlanificacion.Modelos
     public partial class Estado
     {
         [Key]
-        [Required]
-        public string EstadoId { get; set; }
+        public string? EstadoId { get; set; }
 
         [Required]
         public string tipoEstado { get; set; }
 
-        public ICollection<ProcesoCompra> ProcesoCompras { get; set; }
+        public ICollection<ProcesoCompra>? ProcesoCompras { get; set; }
     }
 }

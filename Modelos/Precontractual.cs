@@ -7,8 +7,7 @@ namespace MatrizPlanificacion.Modelos
     public partial class Precontractual
     {
         [Key]
-        [Required]
-        public string IdPrecontractual { get; set; }
+        public string? IdPrecontractual { get; set; }
 
         [ForeignKey("IdPreparatoria")]
         public string? IdPreparatoria { get; set; }

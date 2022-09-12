@@ -6,11 +6,10 @@ namespace MatrizPlanificacion.Modelos
     public partial class AlertaDSPPP
     {
         [Key]
-        [Required]
-        public string AlertaDSPPPId { get; set; }
+        public string? AlertaDSPPPId { get; set; }
 
-        [ForeignKey("ProcesoCompraId")]
         [Required]
+        [ForeignKey("ProcesoCompraId")]
         public string ProcesoCompraId { get; set; }
         public ProcesoCompra ProcesoCompra { get; set; }
 

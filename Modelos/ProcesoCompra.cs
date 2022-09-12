@@ -8,8 +8,7 @@ namespace MatrizPlanificacion.Modelos
     public partial class ProcesoCompra
     {
         [Key]
-        [Required]
-        public string ProcesoCompraId { get; set; }
+        public string? ProcesoCompraId { get; set; }
 
         [ForeignKey("IdProcesoCompra")]
         public ICollection<Preparatoria>? Preparatorias { get; set; }
@@ -29,7 +28,7 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         [ForeignKey("PlantaId")]
         public string PlantaId { get; set; }
-        public PlantaUnidadArea PlantaUnidadArea { get; set; }
+        public PlantaUnidadArea Planta { get; set; }
 
         [Required]
         [Display(Name = "Nro. Proceso")]
@@ -71,8 +70,8 @@ namespace MatrizPlanificacion.Modelos
         public string mesPlanificado { get; set; }
 
 
-        public ICollection<AlertaDSPPP> AlertasDSPPP { get; set; }
-        public ICollection<Observacion> Observaciones { get; set; }
+        public ICollection<AlertaDSPPP>? AlertasDSPPP { get; set; }
+        public ICollection<Observacion>? Observaciones { get; set; }
 
     }
 
