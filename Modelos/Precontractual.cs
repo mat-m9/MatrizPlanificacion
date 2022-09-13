@@ -13,9 +13,6 @@ namespace MatrizPlanificacion.Modelos
         public string? IdPreparatoria { get; set; }
         public Preparatoria? Preparatoria {get; set; }
 
-        //[ForeignKey("IdPrecontractual")]
-        //public ICollection<Contractual>? Contractuales { get; set; }
-
         [DataType(DataType.Date)]
         public DateOnly fechaAdjudicacion { get; set; }
 

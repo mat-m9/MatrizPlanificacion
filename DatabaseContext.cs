@@ -47,7 +47,7 @@ namespace MatrizPlanificacion
                 .ValueGeneratedOnAdd());
 
             builder.Entity<Contractual>(o =>
-                o.Property(x => x.IdPrecontractual)
+                o.Property(x => x.ContractualId)
                 .HasDefaultValue("uuid_generate_v4()")
                 .ValueGeneratedOnAdd());
 

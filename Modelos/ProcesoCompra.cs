@@ -33,20 +33,20 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         [Display(Name = "Nro. Proceso")]
         [RegularExpression("([1-9][0-9]*)")]
-        public int numProceso { get; set; }
+        public string numProceso { get; set; }
 
         [Required]
-        public long cpc { get; set; }
+        public string cpc { get; set; }
 
         [Required]
         [Display(Name = "Grupo de gasto")]
         [RegularExpression("([1-9][0-9]*)")]
-        public int grupoGasto { get; set; }
+        public string grupoGasto { get; set; }
 
         [Required]
         [Display(Name = "Item Presupuestario")]
         [RegularExpression("([1-9][0-9]*)")]
-        public long itemPresup { get; set; }
+        public string itemPresup { get; set; }
 
         [Required]
         [StringLength(100)]

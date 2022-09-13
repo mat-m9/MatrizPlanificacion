@@ -22,7 +22,7 @@ namespace MatrizPlanificacion.Modelos
         public DateOnly fechaFinalizacion { get; set; }
 
         [Required]
-        public int rucOferente { get; set; }
+        public string rucOferente { get; set; }
 
         [Required]
         [StringLength(40)]
