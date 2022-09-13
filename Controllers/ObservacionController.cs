@@ -39,7 +39,7 @@ namespace MatrizPlanificacion.Controllers
         {
             var created = context.Observaciones.Add(observacion);
             await context.SaveChangesAsync();
-            return CreatedAtAction("GetEstado", new { id = observacion.ObservacionId }, created.Entity);
+            return Ok(observacion);//CreatedAtAction("GetEstado", new { id = observacion.ObservacionId }, created.Entity);
 
         }
 

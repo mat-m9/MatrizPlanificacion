@@ -11,7 +11,7 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         [ForeignKey("ProcesoCompraId")]
         public string ProcesoCompraId { get; set; }
-        public ProcesoCompra ProcesoCompra { get; set; }
+        public ProcesoCompra? ProcesoCompra { get; set; }
 
         [Required]
         public string descripcionAlerta { get; set; }

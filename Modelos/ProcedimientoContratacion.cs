@@ -10,7 +10,7 @@ namespace MatrizPlanificacion.Modelos
 
 
         [ForeignKey("ProcedimientoId")]
-        public ICollection<ProcesoCompra> ProcesoCompra { get; set; }
+        public ICollection<ProcesoCompra>? ProcesoCompra { get; set; }
 
         [Required]
         [StringLength(20)]

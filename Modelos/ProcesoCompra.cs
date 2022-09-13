@@ -17,18 +17,18 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         [ForeignKey("EstadoId")]
         public string EstadoId { get; set; }
-        public Estado Estado { get; set; }
+        public Estado? Estado { get; set; }
 
 
         [Required]
         [ForeignKey("EtapaId")]
         public string EtapaId { get; set; }
-        public Etapa Etapa { get; set; }
+        public Etapa? Etapa { get; set; }
 
         [Required]
         [ForeignKey("PlantaId")]
         public string PlantaId { get; set; }
-        public PlantaUnidadArea Planta { get; set; }
+        public PlantaUnidadArea? Planta { get; set; }
 
         [Required]
         [Display(Name = "Nro. Proceso")]

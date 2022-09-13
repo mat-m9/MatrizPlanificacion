@@ -8,6 +8,6 @@ namespace MatrizPlanificacion.Modelos
     {
         public string AreaId { get; set; }
         [ForeignKey("AreaId")]
-        public PlantaUnidadArea Area { get; set; }
+        public PlantaUnidadArea? Area { get; set; }
     }
 }

@@ -1,7 +1,11 @@
 using MatrizPlanificacion;
+using MatrizPlanificacion.Converter;
 using MatrizPlanificacion.Modelos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +15,26 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-/*builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "MatrizPlanificacion", Version = "v1" });
-    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.ElementAt(12)); //Escoge el controlador..?
-});*/
+
+//Ciclos de la entidad recursiva
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+//Soluciaonar DateOnly
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+    });
+//Presentar mejor la fecha
+builder.Services.AddSwaggerGen(options =>
+    options.MapType<DateOnly>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "date",
+        Example = new OpenApiString("2022-01-01")
+    })
+);
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
@@ -42,9 +61,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-/*app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("./v1/swagger.json", "My API V1");
-});*/
+
 
 app.Run();

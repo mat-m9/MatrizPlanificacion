@@ -14,8 +14,8 @@ namespace MatrizPlanificacion.Modelos
         public string? IdProcesoCompra { get; set; }
         public ProcesoCompra? ProcesoCompra { get; set; }
 
-        [ForeignKey("IdPreparatoria")]
-        public ICollection<Precontractual> Precontractuales { get; set; }
+        //[ForeignKey("IdPreparatoria")]
+        //public ICollection<Precontractual>? Precontractuales { get; set; }
 
         [Display(Name = "Fecha programada de revisión")]
         [DataType(DataType.Date)]
