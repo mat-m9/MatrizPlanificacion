@@ -8,9 +8,10 @@ namespace MatrizPlanificacion.Modelos
         [Key]
         public string? PlantaUnidadAreaId { get; set; }
 
+
         [ForeignKey("PadreId")]
-        public string PadreId { get; set; }
-        public PlantaUnidadArea Padre { get; set; }
+        public string? PadreId { get; set; }
+        public PlantaUnidadArea? Padre { get; set; }
 
         [Required]
         public string nombre { get; set; }

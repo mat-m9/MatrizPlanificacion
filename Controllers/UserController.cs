@@ -9,7 +9,7 @@ namespace MatrizPlanificacion.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly DatabaseContext context;
+        private DatabaseContext context;
 
         public UserController(DatabaseContext context)
         {
