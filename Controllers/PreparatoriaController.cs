@@ -19,7 +19,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Preparatoria>>> Get()
         {
-            var preparatorias = await context.Preparatorias.ToListAsync();
+            var preparatorias = await context.Preparatorias.Include(p => p.ProcesoCompra).ToListAsync();
             if (!preparatorias.Any())
                 return NotFound();
             return preparatorias;
@@ -28,7 +28,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<Preparatoria>>> GetPreparatoria(string id)
         {
-            var preparatoria = await context.Preparatorias.Where(e => e.PreparatoriaId.Equals(id)).FirstOrDefaultAsync();
+            var preparatoria = await context.Preparatorias.Where(e => e.PreparatoriaId.Equals(id)).Include(p => p.ProcesoCompra).FirstOrDefaultAsync();
             if (preparatoria == null)
                 return NotFound();
             return Ok(preparatoria);

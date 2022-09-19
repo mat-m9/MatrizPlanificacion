@@ -19,7 +19,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<PlantaUnidadArea>>> Get()
         {
-            var areas = await context.PlantaUnidadAreas.ToListAsync();
+            var areas = await context.PlantaUnidadAreas.Include(p => p.Padre).ToListAsync();
             if (!areas.Any())
                 return NotFound();
             return areas;
@@ -28,7 +28,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<PlantaUnidadArea>>> GetArea(string id)
         {
-            var area = await context.PlantaUnidadAreas.Where(e => e.PlantaUnidadAreaId.Equals(id)).FirstOrDefaultAsync();
+            var area = await context.PlantaUnidadAreas.Where(e => e.PlantaUnidadAreaId.Equals(id)).Include(p => p.Padre).FirstOrDefaultAsync();
             if (area == null)
                 return NotFound();
             return Ok(area);

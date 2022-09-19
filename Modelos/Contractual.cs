@@ -28,6 +28,7 @@ namespace MatrizPlanificacion.Modelos
         [StringLength(40)]
         public string nombreProveedor { get; set; }
 
-
+        [Required]
+        public string plazoContrato { get; set; }
     }
 }

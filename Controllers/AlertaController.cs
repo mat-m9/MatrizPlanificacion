@@ -20,7 +20,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<AlertaDSPPP>>> Get()
         {
-            var alertas = await context.Alertas.ToListAsync();
+            var alertas = await context.Alertas.Include(r => r.ProcesoCompra).ToListAsync();
             if (!alertas.Any())
                 return NotFound();
             return alertas;
@@ -29,7 +29,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<AlertaDSPPP>>> GetAlerta(string id)
         {
-            var alerta = await context.Alertas.Where(e => e.AlertaDSPPPId.Equals(id)).FirstOrDefaultAsync();
+            var alerta = await context.Alertas.Where(e => e.AlertaDSPPPId.Equals(id)).Include(r => r.ProcesoCompra).FirstOrDefaultAsync();
             if (alerta == null)
                 return NotFound();
             return Ok(alerta);

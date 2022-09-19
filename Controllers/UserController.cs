@@ -19,7 +19,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<User>>> Get()
         {
-            var users = await context.Users.ToListAsync();
+            var users = await context.Users.Include(a => a.Area).ToListAsync();
             if (!users.Any())
                 return NotFound();
             return users;
@@ -29,7 +29,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<User>>> GetUser(string id)
         {
-            var user = await context.Users.Where(e => e.Id.Equals(id)).FirstOrDefaultAsync();
+            var user = await context.Users.Where(e => e.Id.Equals(id)).Include(a => a.Area).FirstOrDefaultAsync();
             if (user == null)
                 return NotFound();
             return Ok(user);

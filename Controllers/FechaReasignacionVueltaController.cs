@@ -19,7 +19,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<FechaReasignacionVuelta>>> Get()
         {
-            var fechaVueltas = await context.FechaReasignacionVueltas.ToListAsync();
+            var fechaVueltas = await context.FechaReasignacionVueltas.Include(r => r.Area).Include(r => r.Proceso).ToListAsync();
             if (!fechaVueltas.Any())
                 return NotFound();
             return fechaVueltas;
@@ -28,7 +28,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<FechaReasignacionVuelta>>> GetFechaVuelta(string id)
         {
-            var fechaVueltas = await context.FechaReasignacionVueltas.Where(e => e.IdVuelta.Equals(id)).FirstOrDefaultAsync();
+            var fechaVueltas = await context.FechaReasignacionVueltas.Where(e => e.IdVuelta.Equals(id)).Include(r => r.Area).Include(r => r.Proceso).FirstOrDefaultAsync();
             if (fechaVueltas == null)
                 return NotFound();
             return Ok(fechaVueltas);

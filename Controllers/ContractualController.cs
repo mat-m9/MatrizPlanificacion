@@ -19,7 +19,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Contractual>>> Get()
         {
-            var contractuales = await context.Contractuales.ToListAsync();
+            var contractuales = await context.Contractuales.Include(r => r.Precontractual).ToListAsync();
             if (!contractuales.Any())
                 return NotFound();
             return contractuales;
@@ -28,7 +28,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<Contractual>>> GetContractual(string id)
         {
-            var contractual = await context.Contractuales.Where(e => e.ContractualId.Equals(id)).FirstOrDefaultAsync();
+            var contractual = await context.Contractuales.Where(e => e.ContractualId.Equals(id)).Include(r => r.Precontractual).FirstOrDefaultAsync();
             if (contractual == null)
                 return NotFound();
             return Ok(contractual);

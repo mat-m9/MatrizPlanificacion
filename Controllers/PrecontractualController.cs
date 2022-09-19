@@ -19,7 +19,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Precontractual>>> Get()
         {
-            var precontractuales = await context.Precontractuales.ToListAsync();
+            var precontractuales = await context.Precontractuales.Include(p => p.Preparatoria).ToListAsync();
             if (!precontractuales.Any())
                 return NotFound();
             return precontractuales;
@@ -28,7 +28,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<Precontractual>>> GetPrecontractual(string id)
         {
-            var precontractual = await context.Precontractuales.Where(e => e.IdPrecontractual.Equals(id)).FirstOrDefaultAsync();
+            var precontractual = await context.Precontractuales.Where(e => e.IdPrecontractual.Equals(id)).Include(p => p.Preparatoria).FirstOrDefaultAsync();
             if (precontractual == null)
                 return NotFound();
             return Ok(precontractual);

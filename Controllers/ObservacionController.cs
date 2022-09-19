@@ -19,7 +19,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Observacion>>> Get()
         {
-            var observaciones = await context.Observaciones.ToListAsync();
+            var observaciones = await context.Observaciones.Include(p => p.Proceso).ToListAsync();
             if (!observaciones.Any())
                 return NotFound();
             return observaciones;
@@ -28,7 +28,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<Observacion>>> GetObservacion(string id)
         {
-            var observacion = await context.Observaciones.Where(e => e.ObservacionId.Equals(id)).FirstOrDefaultAsync();
+            var observacion = await context.Observaciones.Where(e => e.ObservacionId.Equals(id)).Include(p => p.Proceso).FirstOrDefaultAsync();
             if (observacion == null)
                 return NotFound();
             return Ok(observacion);

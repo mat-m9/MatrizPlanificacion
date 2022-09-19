@@ -19,7 +19,8 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> Get()
         {
-            var procesos = await context.ProcesoCompras.ToListAsync();
+            var procesos = await context.ProcesoCompras.Include(p => p.Planta).Include(p => p.Preparatorias)
+                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).ToListAsync();
             if (!procesos.Any())
                 return NotFound();
             return procesos;
@@ -28,7 +29,8 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProceso(string id)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.ProcesoCompraId.Equals(id)).FirstOrDefaultAsync();
+            var proceso = await context.ProcesoCompras.Where(e => e.ProcesoCompraId.Equals(id)).Include(p => p.Planta).Include(p => p.Preparatorias)
+                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).FirstOrDefaultAsync();
             if (proceso == null)
                 return NotFound();
             return Ok(proceso);
