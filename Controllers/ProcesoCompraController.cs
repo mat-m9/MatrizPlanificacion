@@ -20,7 +20,7 @@ namespace MatrizPlanificacion.Controllers
         public async Task<ActionResult<ICollection<ProcesoCompra>>> Get()
         {
             var procesos = await context.ProcesoCompras.Include(p => p.Planta).Include(p => p.Preparatorias)
-                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).ToListAsync();
+                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).Include(p => p.Estado).Include(p => p.Etapa).ToListAsync();
             if (!procesos.Any())
                 return NotFound();
             return procesos;
