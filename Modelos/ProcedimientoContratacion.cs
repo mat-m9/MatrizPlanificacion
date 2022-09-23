@@ -7,13 +7,13 @@ namespace MatrizPlanificacion.Modelos
     {
         [Key]
         public string? ProcedimientoContratacionId { get; set; }
-
-
-        [ForeignKey("ProcedimientoId")]
-        public ICollection<ProcesoCompra>? ProcesoCompra { get; set; }
+        
 
         [Required]
         [StringLength(20)]
         public string tipoProcedimiento { get; set; }
+
+        public ICollection<ProcesoCompra>? ProcesoCompra { get; set; }
+
     }
 }
