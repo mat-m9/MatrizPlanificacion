@@ -1,5 +1,9 @@
 ﻿using MatrizPlanificacion.Modelos;
+using MatrizPlanificacion.ResponseModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 
 namespace MatrizPlanificacion.Controllers
@@ -10,10 +14,13 @@ namespace MatrizPlanificacion.Controllers
     {
 
         private DatabaseContext context;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<User> userManager;
 
-        public UserController(DatabaseContext context)
+
+        public UserController(DatabaseContext context, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
         {
             this.context = context;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -36,11 +43,29 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<String>> Post(User user)
+        public async Task<ActionResult<String>> Post(UserRegisterRequest registro)
         {
-            var created = context.Users.Add(user);
-            await context.SaveChangesAsync();
-            return CreatedAtAction("GetUser", new { id = user.Id }, created.Entity);
+            PasswordHasher passwordHasher = new PasswordHasher();
+
+            if (ModelState.IsValid)
+            {
+                var user = new User
+                {
+                    UserName = registro.email,
+                    NormalizedUserName = registro.email.ToUpper(),
+                    Email = registro.email,
+                    NormalizedEmail = registro.email.ToUpper(),
+                    AreaId = registro.planta.PlantaUnidadAreaId,
+                    PasswordHash = passwordHasher.HashPassword(registro.password)
+                };
+
+                var created = context.Users.Add(user);
+                await context.SaveChangesAsync();
+                
+                return CreatedAtAction("GetUser", new {id = user.Id}, created.Entity);
+
+            }
+            return NotFound();
         }
 
         [HttpPut("id")]
