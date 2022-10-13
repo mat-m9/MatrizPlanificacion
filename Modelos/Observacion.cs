@@ -15,7 +15,7 @@ namespace MatrizPlanificacion.Modelos
 
 
         [Required]
-        public DateOnly fechaObsservacion { get; set; }
+        public DateTime? fechaObsservacion { get; set; }
 
         [Required]
         public string descripcionObservacion { get; set; }

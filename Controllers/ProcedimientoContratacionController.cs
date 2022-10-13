@@ -1,4 +1,6 @@
 ﻿using MatrizPlanificacion.Modelos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +8,8 @@ namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProcedimientoContratacionController : ControllerBase
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class ProcedimientoContratacionController : Controller
     {
 
         private readonly DatabaseContext context;
