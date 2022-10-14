@@ -42,45 +42,6 @@ namespace MatrizPlanificacion.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<String>> Post(UserRegisterRequest registro)
-        {
-            PasswordHasher passwordHasher = new PasswordHasher();
-
-            if (ModelState.IsValid)
-            {
-                var user = new User
-                {
-                    UserName = registro.email,
-                    NormalizedUserName = registro.email.ToUpper(),
-                    Email = registro.email,
-                    NormalizedEmail = registro.email.ToUpper(),
-                    AreaId = registro.planta.PlantaUnidadAreaId,
-                    PasswordHash = passwordHasher.HashPassword(registro.password)
-                };
-
-                var created = context.Users.Add(user);
-                await context.SaveChangesAsync();
-                
-                return CreatedAtAction("GetUser", new {id = user.Id}, created.Entity);
-
-            }
-            return NotFound();
-        }
-
-        [HttpPut("id")]
-        public async Task<ActionResult> Put(string id, User user)
-        {
-            var existe = await Existe(id);
-
-            if (!existe)
-                return NotFound();
-
-            user.Id = id;
-            context.Users.Update(user);
-            await context.SaveChangesAsync();
-            return NoContent();
-        }
 
         [HttpDelete("id")]
         public async Task<ActionResult> Delete(string id)

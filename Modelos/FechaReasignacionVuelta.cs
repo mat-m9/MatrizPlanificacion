@@ -19,6 +19,6 @@ namespace MatrizPlanificacion.Modelos
         public PlantaUnidadArea? Area { get; set; }
 
         [Required]
-        public DateTime fechaVuelta { get; set; }
+        public DateTime? fechaVuelta { get; set; }
     }
 }

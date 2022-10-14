@@ -5,6 +5,8 @@ namespace MatrizPlanificacion.ResponseModels
 {
     public class UserRegisterRequest
     { 
+        public string userName { get; set; }
+
         [EmailAddress]
         public string email { get; set; }
 

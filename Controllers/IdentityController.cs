@@ -27,7 +27,7 @@ namespace MatrizPlanificacion.Controllers
                 });
             }
 
-            var authResponse = await _identityService.RegisterAsync(request.email, request.password, request.planta);
+            var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.planta);
 
             if (!authResponse.Success)
             {
@@ -47,7 +47,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost(template: ApiRoutes.Identity.Login)]
         public async Task<IActionResult>Login([FromBody] UserLoginRequest request)
         {
-            var authResponse = await _identityService.LoginAsync(request.email, request.password);
+            var authResponse = await _identityService.LoginAsync(request.userName, request.password);
 
             if (!authResponse.Success)
             {
@@ -65,9 +65,9 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost(ApiRoutes.Identity.Refresh)]
-        public async Task<IActionResult> Login([FromBody] RefreshTokenRequest request)
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
         {
-            var authResponse = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
+            var authResponse = await _identityService.RefreshTokenAsync(request.Token, request.RefreshedToken);
 
             if (!authResponse.Success)
             {

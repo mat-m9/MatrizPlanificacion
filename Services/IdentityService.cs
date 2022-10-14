@@ -1,6 +1,7 @@
 ﻿using MatrizPlanificacion.Modelos;
 using MatrizPlanificacion.Options;
 using MatrizPlanificacion.ResponseModels;
+//using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,20 +27,20 @@ namespace MatrizPlanificacion.Services
             this.databaseContext = databaseContext;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(string email, string password, PlantaUnidadArea planta)
+        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, PlantaUnidadArea planta)
         {
-            var existingUser = await _userManager.FindByEmailAsync(email);  
-            if(existingUser != null)
+            var existingUser = await _userManager.FindByNameAsync(userName);
+            if (existingUser != null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "Ya existe un usuario con este correo" }
+                    Errors = new[] { "Ya existe un usuario con este nombre" }
                 };
             }
             var newUser = new User
             {
                 Email = email,
-                UserName = email,
+                UserName = userName,
                 AreaId = planta.PlantaUnidadAreaId
 
             };
@@ -54,9 +55,9 @@ namespace MatrizPlanificacion.Services
             return await GenerateAthenticationResultForUserAsync(newUser);
         }
 
-        public async  Task<AuthenticationResult> LoginAsync(string email, string password)
+        public async  Task<AuthenticationResult> LoginAsync(string userName, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByNameAsync(userName);
             if(user == null)
             {
                 return new AuthenticationResult
@@ -85,23 +86,21 @@ namespace MatrizPlanificacion.Services
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(claims: new[]
                 {
-                    new Claim(type: JwtRegisteredClaimNames.Sub, value: newUser.Email),
+                    new Claim(type: JwtRegisteredClaimNames.Sub, value: newUser.UserName),
                     new Claim(type: JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
-                    //new Claim(type: JwtRegisteredClaimNames.Jti, value: newUser.Email),
-                    //new Claim(type: "id", value: newUser.Id)
+                    new Claim(type: "id", value: newUser.Id),//para identificar al usuario del token validado ARREGLAR
                 }),
-                Expires = DateTime.Now.AddMinutes(_jwtSettings.TokenLifeTime),
+                Expires = DateTime.UtcNow.AddSeconds(_jwtSettings.TokenLifeTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var refreshToken = new RefreshToken
             {
-                Token = tokenHandler.WriteToken(token),
                 JwtId = token.Id,
                 UserId = newUser.Id,
                 CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.Now.AddMinutes(_jwtSettings.TokenLifeTime)
+                ExpiryDate = DateTime.UtcNow.AddMinutes(_jwtSettings.TokenLifeTime)
             };
 
             await databaseContext.RefreshTokens.AddAsync(refreshToken);
@@ -111,7 +110,7 @@ namespace MatrizPlanificacion.Services
             {
                 Success = true,
                 Token = tokenHandler.WriteToken(token),
-                RefreshToken = refreshToken.Token
+                RefreshToken = refreshToken.JwtId
             };
         }
 
@@ -129,8 +128,8 @@ namespace MatrizPlanificacion.Services
                 return new AuthenticationResult { Errors = new[] { "This token has't expired yet" } };
 
             var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
-            var storedRefreshToken = await databaseContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken);
+            
+            var storedRefreshToken = await databaseContext.RefreshTokens.Where(rT => rT.JwtId.Equals(refreshToken)).FirstOrDefaultAsync(); //.SingleOrDefaultAsync(x => x.JwtId == refreshToken);
 
             if (storedRefreshToken == null)
                 return new AuthenticationResult { Errors = new[] { "This refresh token does not exist" } };
@@ -152,6 +151,7 @@ namespace MatrizPlanificacion.Services
             await databaseContext.SaveChangesAsync();
 
             var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
+            //var user = await _userManager.FindByNameAsync(validatedToken.Claims.Single(x => x.Type == "Sub").Value);
             return await GenerateAthenticationResultForUserAsync(user);
         }
 

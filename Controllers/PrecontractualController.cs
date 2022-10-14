@@ -37,9 +37,17 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(Precontractual precontractual)
         {
-            var created = context.Precontractuales.Add(precontractual);
-            await context.SaveChangesAsync();
-            return CreatedAtAction("GetPrecontractual", new { id = precontractual.IdPrecontractual }, created.Entity);
+            try
+            {
+                precontractual.fechaAdjudicacion = DateTime.SpecifyKind(precontractual.fechaAdjudicacion.Value, DateTimeKind.Utc);
+                var created = context.Precontractuales.Add(precontractual);
+                await context.SaveChangesAsync();
+                return CreatedAtAction("GetPrecontractual", new { id = precontractual.IdPrecontractual }, created.Entity);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }      
         }
 
         [HttpPut("id")]
@@ -51,9 +59,17 @@ namespace MatrizPlanificacion.Controllers
                 return NotFound();
 
             precontractual.IdPrecontractual = id;
-            context.Precontractuales.Update(precontractual);
-            await context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                precontractual.fechaAdjudicacion = DateTime.SpecifyKind(precontractual.fechaAdjudicacion.Value, DateTimeKind.Utc);
+                context.Precontractuales.Update(precontractual);
+                await context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpDelete("id")]
