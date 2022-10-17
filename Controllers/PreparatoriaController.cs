@@ -37,10 +37,24 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(Preparatoria preparatoria)
         {
-            var created = context.Preparatorias.Add(preparatoria);
-            await context.SaveChangesAsync();
-            return CreatedAtAction("GetEstado", new { id = preparatoria.PreparatoriaId }, created.Entity);
-
+            try
+            {
+                preparatoria.fechaProgramada = DateTime.SpecifyKind(preparatoria.fechaProgramada.Value, DateTimeKind.Utc);
+                preparatoria.fechaSolicitud = DateTime.SpecifyKind(preparatoria.fechaSolicitud.Value, DateTimeKind.Utc);
+                preparatoria.fechaRespuesta = DateTime.SpecifyKind(preparatoria.fechaRespuesta.Value, DateTimeKind.Utc);
+                preparatoria.fechaMesa = DateTime.SpecifyKind(preparatoria.fechaMesa.Value, DateTimeKind.Utc);
+                preparatoria.fechaEmision = DateTime.SpecifyKind(preparatoria.fechaEmision.Value, DateTimeKind.Utc);
+                preparatoria.fechaReal = DateTime.SpecifyKind(preparatoria.fechaReal.Value, DateTimeKind.Utc);
+                preparatoria.fechaAutorizacion = DateTime.SpecifyKind(preparatoria.fechaAutorizacion.Value, DateTimeKind.Utc);
+                preparatoria.fechaPublicacion = DateTime.SpecifyKind(preparatoria.fechaPublicacion.Value, DateTimeKind.Utc);
+                var created = context.Preparatorias.Add(preparatoria);
+                await context.SaveChangesAsync();
+                return CreatedAtAction("GetEstado", new { id = preparatoria.PreparatoriaId }, created.Entity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpPut("id")]
@@ -52,9 +66,24 @@ namespace MatrizPlanificacion.Controllers
                 return NotFound();
 
             preparatoria.PreparatoriaId = id;
-            context.Preparatorias.Update(preparatoria);
-            await context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                preparatoria.fechaProgramada = DateTime.SpecifyKind(preparatoria.fechaProgramada.Value, DateTimeKind.Utc);
+                preparatoria.fechaSolicitud = DateTime.SpecifyKind(preparatoria.fechaSolicitud.Value, DateTimeKind.Utc);
+                preparatoria.fechaRespuesta = DateTime.SpecifyKind(preparatoria.fechaRespuesta.Value, DateTimeKind.Utc);
+                preparatoria.fechaMesa = DateTime.SpecifyKind(preparatoria.fechaMesa.Value, DateTimeKind.Utc);
+                preparatoria.fechaEmision = DateTime.SpecifyKind(preparatoria.fechaEmision.Value, DateTimeKind.Utc);
+                preparatoria.fechaReal = DateTime.SpecifyKind(preparatoria.fechaReal.Value, DateTimeKind.Utc);
+                preparatoria.fechaAutorizacion = DateTime.SpecifyKind(preparatoria.fechaAutorizacion.Value, DateTimeKind.Utc);
+                preparatoria.fechaPublicacion = DateTime.SpecifyKind(preparatoria.fechaPublicacion.Value, DateTimeKind.Utc);
+                context.Preparatorias.Update(preparatoria);
+                await context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpDelete("id")]

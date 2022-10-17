@@ -37,9 +37,17 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(FechaReasignacionIda fechasReasigIda)
         {
-            var created = context.FechaReasignacionIdas.Add(fechasReasigIda);
-            await context.SaveChangesAsync();
-            return CreatedAtAction("GetFechaIda", new { id = fechasReasigIda.IdIda }, created.Entity);
+            try
+            {
+                fechasReasigIda.fechaIda = DateTime.SpecifyKind(fechasReasigIda.fechaIda.Value, DateTimeKind.Utc);
+                var created = context.FechaReasignacionIdas.Add(fechasReasigIda);
+                await context.SaveChangesAsync();
+                return CreatedAtAction("GetFechaIda", new { id = fechasReasigIda.IdIda }, created.Entity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpPut("id")]
@@ -51,9 +59,17 @@ namespace MatrizPlanificacion.Controllers
                 return NotFound();
 
             fechasReasigIda.IdIda = id;
-            context.FechaReasignacionIdas.Update(fechasReasigIda);
-            await context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                fechasReasigIda.fechaIda = DateTime.SpecifyKind(fechasReasigIda.fechaIda.Value, DateTimeKind.Utc);
+                context.FechaReasignacionIdas.Update(fechasReasigIda);
+                await context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpDelete("id")]

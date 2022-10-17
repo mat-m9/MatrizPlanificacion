@@ -37,9 +37,19 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(Contractual contractual)
         {
-            var created = context.Contractuales.Add(contractual);
-            await context.SaveChangesAsync();
-            return CreatedAtAction("GetContractual", new { id = contractual.ContractualId }, created.Entity);
+            try
+            {
+                contractual.fechaSuscripcion = DateTime.SpecifyKind(contractual.fechaSuscripcion.Value, DateTimeKind.Utc);
+                contractual.fechaFinalizacion = DateTime.SpecifyKind(contractual.fechaFinalizacion.Value, DateTimeKind.Utc);
+                var created = context.Contractuales.Add(contractual);
+                await context.SaveChangesAsync();
+                return CreatedAtAction("GetContractual", new { id = contractual.ContractualId }, created.Entity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
         }
 
         [HttpPut("id")]
@@ -51,9 +61,18 @@ namespace MatrizPlanificacion.Controllers
                 return NotFound();
 
             contractual.ContractualId = id;
-            context.Contractuales.Update(contractual);
-            await context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                contractual.fechaSuscripcion = DateTime.SpecifyKind(contractual.fechaSuscripcion.Value, DateTimeKind.Utc);
+                contractual.fechaFinalizacion = DateTime.SpecifyKind(contractual.fechaFinalizacion.Value, DateTimeKind.Utc);
+                context.Contractuales.Update(contractual);
+                await context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpDelete("id")]

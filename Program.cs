@@ -24,7 +24,6 @@ builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -32,12 +31,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-////Soluciaonar DateOnly
-//builder.Services.AddControllers()
-//    .AddJsonOptions(options =>
-//    {
-//        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
-//    });
+//Soluciaonar DateOnly
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+    });
 
 var tokenValidationParameters = new TokenValidationParameters
 {
@@ -68,19 +67,9 @@ var security = new Dictionary<string, IEnumerable<string>>
             {"Bearer", new string[0] }
         };
 
-//builder.Services.AddSwaggerGen(options =>
-//    options.AddSecurityDefinition(name: "Bearer", new OpenApiSecurityScheme
-//    {
-//        Description = "JWT Authorization header using the bearer sheme",
-//        Name = "Authorization",
-//        In = ParameterLocation.Header,
-//        Type = SecuritySchemeType.ApiKey
-//    })
-//);
-
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Matriz Planificacion", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,

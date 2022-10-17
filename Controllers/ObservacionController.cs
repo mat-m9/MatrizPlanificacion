@@ -37,10 +37,17 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(Observacion observacion)
         {
-            var created = context.Observaciones.Add(observacion);
-            await context.SaveChangesAsync();
-            return Ok(observacion);//CreatedAtAction("GetEstado", new { id = observacion.ObservacionId }, created.Entity);
-
+            try
+            {
+                observacion.fechaObsservacion = DateTime.SpecifyKind(observacion.fechaObsservacion.Value, DateTimeKind.Utc);
+                var created = context.Observaciones.Add(observacion);
+                await context.SaveChangesAsync();
+                return CreatedAtAction("GetObservacion", new { id = observacion.ObservacionId }, created.Entity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpPut("id")]
@@ -52,9 +59,17 @@ namespace MatrizPlanificacion.Controllers
                 return NotFound();
 
             observacion.ObservacionId = id;
-            context.Observaciones.Update(observacion);
-            await context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                observacion.fechaObsservacion = DateTime.SpecifyKind(observacion.fechaObsservacion.Value, DateTimeKind.Utc);
+                context.Observaciones.Update(observacion);
+                await context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpDelete("id")]
