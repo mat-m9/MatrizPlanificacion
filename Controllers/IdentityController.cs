@@ -2,6 +2,7 @@
 using MatrizPlanificacion.ResponseModels;
 using MatrizPlanificacion.Services;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -27,7 +28,8 @@ namespace MatrizPlanificacion.Controllers
                 });
             }
 
-            var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.planta);
+            var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.rol, request.planta);
+            
 
             if (!authResponse.Success)
             {

@@ -1,6 +1,8 @@
 ﻿using MatrizPlanificacion.Modelos;
 using MatrizPlanificacion.ResponseModels;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+//
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,57 +13,48 @@ namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AspNetRolesController : ControllerBase
+   
+    [Authorize]
+    public class RolesController : ControllerBase
     {
 
         private DatabaseContext context;
-        private readonly AspNetRoleManager<Rol> roleManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly ILogger<RolesController> _logger;
 
 
-        public AspNetRolesController(DatabaseContext context, AspNetRoleManager<Rol> _roleManager)
+        public RolesController(DatabaseContext context, RoleManager<IdentityRole> _roleManager, ILogger<RolesController> log)
         {
             this.context = context;
             this.roleManager = _roleManager;
+            this._logger = log;
         }
-
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<ActionResult<ICollection<Rol>>> Get()
+        public async Task<ActionResult<ICollection<IdentityRole>>> Get()
         {
-            var roles = await context.Roles.ToListAsync();
+            var roles = await roleManager.Roles.ToListAsync();
             if (!roles.Any())
                 return NotFound();
             return roles;
-
-        }
-
-        [HttpGet("id")]
-        public async Task<ActionResult<ICollection<Rol>>> GetRol(string id)
-        {
-            var rol = await context.Roles.Where(e => e.Id.Equals(id)).FirstOrDefaultAsync();
-            if (rol == null)
-                return NotFound();
-            return Ok(rol);
         }
 
         [HttpPost]
-        public async Task<ActionResult<String>> Post(CreateRol creteRol)
+        public async Task<ActionResult<String>> Post(CreateRol createRol)
         {
 
-            if (ModelState.IsValid)
+            var newRol = new IdentityRole
             {
-                var newRol = new Rol
-                {
-                    Name = creteRol.RolName
+                Name = createRol.RolName,
+                NormalizedName = createRol.RolName
 
-                };
-
-                var createdRol = await roleManager.CreateAsync(newRol);
-                if (!createdRol.Succeeded)
-                {
-                    return Ok(createdRol);
-                }
+            };
+            var createdRol = await roleManager.CreateAsync(newRol);
+            if (createdRol.Succeeded)
+            {
+                return Ok(createdRol);
             }
-            return NotFound();
+            return BadRequest();
         }
 
         [HttpDelete("id")]

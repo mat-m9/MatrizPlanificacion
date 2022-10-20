@@ -1,5 +1,6 @@
 ﻿using MatrizPlanificacion.Modelos;
 using MatrizPlanificacion.ResponseModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,11 +24,11 @@ namespace MatrizPlanificacion
         public virtual DbSet<ProcedimientoContratacion> ProcedimientoContrataciones { get; set; } = null!;
         public virtual DbSet<ProcesoCompra> ProcesoCompras { get; set; } = null!;
         public virtual DbSet<User> Usuarios { get; set; } = null!;
-        public virtual DbSet<Rol> Roles { get; set; } = null!;
+//
         public virtual DbSet<FechaReasignacionIda> FechaReasignacionIdas { get; set; } = null!;
         public virtual DbSet<FechaReasignacionVuelta> FechaReasignacionVueltas { get; set; } = null!;
 
-        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
