@@ -49,7 +49,7 @@ namespace MatrizPlanificacion.Controllers
                 preparatoria.fechaPublicacion = DateTime.SpecifyKind(preparatoria.fechaPublicacion.Value, DateTimeKind.Utc);
                 var created = context.Preparatorias.Add(preparatoria);
                 await context.SaveChangesAsync();
-                return CreatedAtAction("GetEstado", new { id = preparatoria.PreparatoriaId }, created.Entity);
+                return CreatedAtAction("GetPreparatoria", new { id = preparatoria.PreparatoriaId }, created.Entity);
             }
             catch (Exception ex)
             {

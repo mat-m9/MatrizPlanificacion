@@ -12,6 +12,8 @@ namespace MatrizPlanificacion.ResponseModels
 
         public string password { get; set; }
 
+        public string rol { get; set; }
+
         public PlantaUnidadArea? planta { get; set; }
     }
 }

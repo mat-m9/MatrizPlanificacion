@@ -1,7 +1,6 @@
 ﻿using MatrizPlanificacion.Modelos;
 using MatrizPlanificacion.Options;
 using MatrizPlanificacion.ResponseModels;
-//using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,7 @@ namespace MatrizPlanificacion.Services
             this.databaseContext = databaseContext;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, PlantaUnidadArea planta)
+        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, string rol, PlantaUnidadArea planta)
         {
             var existingUser = await _userManager.FindByNameAsync(userName);
             if (existingUser != null)
@@ -45,6 +44,7 @@ namespace MatrizPlanificacion.Services
 
             };
             var createdUser = await _userManager.CreateAsync(newUser, password);
+           
             if (!createdUser.Succeeded)
             {
                 return new AuthenticationResult
@@ -52,6 +52,9 @@ namespace MatrizPlanificacion.Services
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
             }
+            var getUser = await _userManager.FindByNameAsync(userName);
+            var setRole = await _userManager.AddToRoleAsync(getUser, rol);
+
             return await GenerateAthenticationResultForUserAsync(newUser);
         }
 
@@ -73,6 +76,7 @@ namespace MatrizPlanificacion.Services
                     Errors = new[] { "El usuario o la contraseña son incorrectos" }
                 };
             }
+            var getRol = await _userManager.GetRolesAsync(user);
             return await GenerateAthenticationResultForUserAsync(user);
         }
 
@@ -82,6 +86,9 @@ namespace MatrizPlanificacion.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+            var roles = await _userManager.GetRolesAsync(newUser);
+            var claims = new List<Claim>();
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(claims: new[]
@@ -89,10 +96,15 @@ namespace MatrizPlanificacion.Services
                     new Claim(type: JwtRegisteredClaimNames.Sub, value: newUser.UserName),
                     new Claim(type: JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
                     new Claim(type: "id", value: newUser.Id),//para identificar al usuario del token validado ARREGLAR
+
                 }),
-                Expires = DateTime.UtcNow.AddSeconds(_jwtSettings.TokenLifeTime),
+                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.TokenLifeTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
             };
+            foreach (var role in roles)
+            {
+                tokenDescriptor.Subject.AddClaim(new Claim(type: ClaimTypes.Role, value:role));
+            }
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var refreshToken = new RefreshToken

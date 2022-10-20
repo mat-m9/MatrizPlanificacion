@@ -38,13 +38,19 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
     });
 
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<DatabaseContext>()
+    .AddDefaultTokenProviders();
+    //.AddRoles<IdentityRole>;
+    //.AddRoles<Rol>();
+
 var tokenValidationParameters = new TokenValidationParameters
 {
     ValidateIssuerSigningKey = true,
     IssuerSigningKey = new SymmetricSecurityKey(key: Encoding.ASCII.GetBytes(jwtSettings.Secret)),
     ValidateIssuer = false,
     ValidateAudience = false,
-    RequireExpirationTime = false,
+    RequireExpirationTime = true,
     ValidateLifetime = true
 };
 
@@ -112,9 +118,10 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 });
 
 
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<DatabaseContext>()
-    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthorization();
+
+
 
 
 var app = builder.Build();
@@ -128,9 +135,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthentication();
+
 
 app.MapControllers();
 
