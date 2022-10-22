@@ -12,5 +12,11 @@
             public const string Register = Base + "/identity/register";
             public const string Refresh = Base + "/identity/refresh";
         }
+
+        public static class Rol
+        {
+            public const string Grant = Base + "/rol/grant";
+            public const string Revoke = Base + "/rol/revoke";
+        }
     }
 }

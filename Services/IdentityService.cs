@@ -53,7 +53,7 @@ namespace MatrizPlanificacion.Services
                 };
             }
             var getUser = await _userManager.FindByNameAsync(userName);
-            var setRole = await _userManager.AddToRoleAsync(getUser, rol);
+            var setRole = await _userManager.AddToRoleAsync(getUser, rol.ToUpper());
 
             return await GenerateAthenticationResultForUserAsync(newUser);
         }

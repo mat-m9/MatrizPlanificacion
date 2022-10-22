@@ -19,21 +19,23 @@ namespace MatrizPlanificacion.Controllers
     {
 
         private DatabaseContext context;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RolesController> _logger;
+        private readonly UserManager<User> _userManager;
 
 
-        public RolesController(DatabaseContext context, RoleManager<IdentityRole> _roleManager, ILogger<RolesController> log)
+        public RolesController(DatabaseContext context, RoleManager<IdentityRole> roleManager, ILogger<RolesController> log, UserManager<User> userManager)
         {
             this.context = context;
-            this.roleManager = _roleManager;
+            this._roleManager = roleManager;
             this._logger = log;
+            this._userManager = userManager;
         }
         [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<ICollection<IdentityRole>>> Get()
         {
-            var roles = await roleManager.Roles.ToListAsync();
+            var roles = await _roleManager.Roles.ToListAsync();
             if (!roles.Any())
                 return NotFound();
             return roles;
@@ -45,11 +47,11 @@ namespace MatrizPlanificacion.Controllers
 
             var newRol = new IdentityRole
             {
-                Name = createRol.RolName,
+                Name = createRol.RolName.ToUpper(),
                 NormalizedName = createRol.RolName
 
             };
-            var createdRol = await roleManager.CreateAsync(newRol);
+            var createdRol = await _roleManager.CreateAsync(newRol);
             if (createdRol.Succeeded)
             {
                 return Ok(createdRol);
@@ -70,6 +72,32 @@ namespace MatrizPlanificacion.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpPost(template: ApiRoutes.Rol.Grant)]
+        public async Task<IActionResult>GrantRole([FromBody] RolRequest rolRequest )
+        {
+            var user = await _userManager.FindByNameAsync(rolRequest.UserName);
+            var grantResult = await _userManager.AddToRoleAsync(user, rolRequest.Rol);
+            
+            if(grantResult.Succeeded)
+                return Ok();
+
+            return BadRequest();
+        }
+
+
+        [HttpDelete(template: ApiRoutes.Rol.Revoke)]
+        public async Task<IActionResult> RevokeRole([FromBody] RolRequest rolRequest)
+        {
+            var user = await _userManager.FindByNameAsync(rolRequest.UserName);
+            var grantResult = await _userManager.RemoveFromRoleAsync(user, rolRequest.Rol);
+
+            if (grantResult.Succeeded)
+                return Ok();
+
+            return BadRequest();
+        }
+
 
         private async Task<bool> Existe(string id)
         {
