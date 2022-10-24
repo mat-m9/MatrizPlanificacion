@@ -39,10 +39,46 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post(PlantaUnidadArea plantaUnidadArea)
         {
-            var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
-            await context.SaveChangesAsync();
-            return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
+            if(plantaUnidadArea.tipo == 'P')
+            {
+                if(plantaUnidadArea.PadreId == null)
+                {
+                    var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
+                    await context.SaveChangesAsync();
+                    return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
+                }
+                return BadRequest();
+            }
+            if(plantaUnidadArea.tipo == 'U')
+            {
+                var padre = await context.PlantaUnidadAreas.FindAsync(plantaUnidadArea.PadreId);
+                if (padre != null) 
+                {
+                    if (padre.tipo == 'P')
+                    {
+                        var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
+                        await context.SaveChangesAsync();
+                        return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
+                    }
+                }
+                return BadRequest();
+            }
+            if(plantaUnidadArea.tipo == 'A')
+            {
+                var padre = await context.PlantaUnidadAreas.FindAsync(plantaUnidadArea.PadreId);
+                if(padre != null)
+                {
+                    if (padre.tipo == 'U')
+                    {
+                        var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
+                        await context.SaveChangesAsync();
+                        return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
+                    }
+                }
+                return BadRequest();
+            }
 
+            return BadRequest();
         }
 
         [HttpPut("id")]

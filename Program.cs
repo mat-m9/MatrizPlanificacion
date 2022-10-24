@@ -101,17 +101,6 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-//builder.Services.AddSwaggerGen(options =>
-
-//    options.MapType<DateOnly>(() => new OpenApiSchema
-//    {
-//        Type = "string",
-//        Format = "date",
-//        Example = new OpenApiString("2022-01-01")
-//    })
-//);
-
-
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -132,8 +121,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

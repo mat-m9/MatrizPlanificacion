@@ -20,30 +20,42 @@ namespace MatrizPlanificacion.Controllers
         [HttpPost(template: ApiRoutes.Identity.Register)]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
-            if (!ModelState.IsValid)
+            if(request.planta != null)
             {
-                return BadRequest(new AuthFailedResponse
+                if (!request.planta.tipo.Equals(null))
                 {
-                    Errors = ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage))
-                });
-            }
+                    if (request.planta.tipo == 'A')
+                    {
+                        if (!ModelState.IsValid)
+                        {
+                            return BadRequest(new AuthFailedResponse
+                            {
+                                Errors = ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage))
+                            });
+                        }
 
-            var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.rol, request.planta);
-            
+                        var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.rol, request.planta);
 
-            if (!authResponse.Success)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = authResponse.Errors
-                }); ;
-            }
 
-            return Ok(new AuthSuccessResponse
-            {
-                Token = authResponse.Token,
-                 RefreshedToken = authResponse.RefreshToken
-            });
+                        if (!authResponse.Success)
+                        {
+                            return BadRequest(new AuthFailedResponse
+                            {
+                                Errors = authResponse.Errors
+                            }); ;
+                        }
+
+                        return Ok(new AuthSuccessResponse
+                        {
+                            Token = authResponse.Token,
+                            RefreshedToken = authResponse.RefreshToken
+                        });
+                    }
+                    return BadRequest();
+                }
+                return BadRequest();
+            }   
+            return BadRequest();
         }
 
         [HttpPost(template: ApiRoutes.Identity.Login)]
