@@ -3,20 +3,19 @@
     public static class ApiRoutes
     {
         public const string Root = "api";
-        public const string Version = "v1";
-        public const string Base = Root + "/" + Version;
+        public const string Base = Root ;
 
         public static class Identity
         {
-            public const string Login = Base + "/identity/login";
-            public const string Register = Base + "/identity/register";
-            public const string Refresh = Base + "/identity/refresh";
+            public const string Login = Base + "/Identity/login";
+            public const string Register = Base + "/Identity/register";
+            public const string Refresh = Base + "/Identity/refresh";
         }
 
         public static class Rol
         {
-            public const string Grant = Base + "/rol/grant";
-            public const string Revoke = Base + "/rol/revoke";
+            public const string Grant = "grant";
+            public const string Revoke = "revoke";
         }
     }
 }

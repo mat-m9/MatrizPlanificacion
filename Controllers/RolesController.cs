@@ -13,7 +13,7 @@ namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-   
+
     [Authorize]
     public class RolesController : ControllerBase
     {
@@ -31,6 +31,7 @@ namespace MatrizPlanificacion.Controllers
             this._logger = log;
             this._userManager = userManager;
         }
+        [Route("api/[controller]")]
         [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<ICollection<IdentityRole>>> Get()
@@ -40,7 +41,7 @@ namespace MatrizPlanificacion.Controllers
                 return NotFound();
             return roles;
         }
-
+        
         [HttpPost]
         public async Task<ActionResult<String>> Post(CreateRol createRol)
         {
