@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization;
+using MatrizPlanificacion.ResponseModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +42,6 @@ builder.Services.AddControllers()
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<DatabaseContext>()
     .AddDefaultTokenProviders();
-    //.AddRoles<IdentityRole>;
-    //.AddRoles<Rol>();
 
 var tokenValidationParameters = new TokenValidationParameters
 {
@@ -62,11 +61,50 @@ builder.Services.AddAuthentication(configureOptions: options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(options =>
-    {
-        options.SaveToken = true;
-        options.TokenValidationParameters = tokenValidationParameters;
-    });
+    .AddJwtBearer("Bearer", options =>
+     {
+         options.SaveToken = true;
+         options.RequireHttpsMetadata = false;
+         options.TokenValidationParameters = tokenValidationParameters;
+         options.Events = new JwtBearerEvents
+         {
+             OnChallenge = context =>
+             {
+                 if (context.AuthenticateFailure != null && context.AuthenticateFailure.GetType() == typeof(SecurityTokenExpiredException))
+                 {
+                     context.HandleResponse();
+                     context.Response.StatusCode = 401;
+                     context.Response.Headers.TryAdd("Token-Expired", "True");
+                     IdentityService identityService;
+                     ResponseModel response = new()
+                     {
+                         Tipo = "Unauthorized",
+                         Message = "Token caducado",
+                         
+                     };
+                     string respuestaSerializada = EncodingHelper.JsonSpanishSerializer(response, response.GetType());
+                     return context.Response.WriteAsync(respuestaSerializada);
+                 }
+                 else if (context.AuthenticateFailure != null && context.AuthenticateFailure.GetType() == typeof(SecurityTokenUnableToValidateException))
+                 {
+                     context.HandleResponse();
+                     context.Response.StatusCode = 401;
+                     context.Response.Headers.TryAdd("Token-Invalid", "True");
+                     ResponseModel response = new()
+                     {
+                         Tipo = "Unauthorized",
+                         Message = "Token Inválido"
+                     };
+                     string respuestaSerializada = EncodingHelper.JsonSpanishSerializer(response, response.GetType());
+                     return context.Response.WriteAsync(respuestaSerializada);
+                 }
+                 return Task.CompletedTask;
+             }
+         };
+     });
+
+
+
 
 var security = new Dictionary<string, IEnumerable<string>>
         {
