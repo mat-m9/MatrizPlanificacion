@@ -36,6 +36,25 @@ namespace MatrizPlanificacion.Controllers
             return Ok(area);
         }
 
+        [HttpGet(template: ApiRoutes.Area.Tipo)]
+        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> Get(char tipo)
+        {
+            var areas = await context.PlantaUnidadAreas.Include(p => p.Padre).Where(p=>p.tipo == tipo) .ToListAsync();
+            if (!areas.Any())
+                return NotFound();
+            return areas;
+        }
+
+        [HttpGet(template: ApiRoutes.Area.Padre)]
+        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> Get(string padreId)
+        {
+            var areas = await context.PlantaUnidadAreas.Include(p => p.Padre).Where(p => p.PadreId == padreId).ToListAsync();
+            if (!areas.Any())
+                return NotFound();
+            return areas;
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<string>> Post(PlantaUnidadArea plantaUnidadArea)
         {
