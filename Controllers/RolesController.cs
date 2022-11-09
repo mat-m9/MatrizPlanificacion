@@ -14,7 +14,7 @@ namespace MatrizPlanificacion.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    [Authorize]
+    //[Authorize]
     public class RolesController : ControllerBase
     {
 
@@ -32,7 +32,7 @@ namespace MatrizPlanificacion.Controllers
             this._userManager = userManager;
         }
         [Route("api/[controller]")]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<ICollection<IdentityRole>>> Get()
         {
