@@ -17,5 +17,11 @@
             public const string Grant = "grant";
             public const string Revoke = "revoke";
         }
+
+        public static class Area
+        {
+            public const string Tipo = "tipo";
+            public const string Padre = "padre";
+        }
     }
 }

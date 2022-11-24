@@ -32,14 +32,19 @@ namespace MatrizPlanificacion.Controllers
             this._userManager = userManager;
         }
         [Route("api/[controller]")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<ActionResult<ICollection<IdentityRole>>> Get()
+        public async Task<ActionResult<List<string>>> Get()
         {
+            List<string> rolesString = new List<string>();
             var roles = await _roleManager.Roles.ToListAsync();
+            foreach (var role in roles)
+            {
+                rolesString.Add(role.Name);
+            }
             if (!roles.Any())
                 return NotFound();
-            return roles;
+            return rolesString;
         }
         
         [HttpPost]
