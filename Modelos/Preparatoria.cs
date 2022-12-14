@@ -9,7 +9,6 @@ namespace MatrizPlanificacion.Modelos
         [Key]
         public string? PreparatoriaId { get; set; }
 
-
         [ForeignKey("IdProcesoCompra")]
         public string? IdProcesoCompra { get; set; }
         public ProcesoCompra? ProcesoCompra { get; set; }
