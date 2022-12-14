@@ -23,5 +23,10 @@
             public const string Tipo = "tipo";
             public const string Padre = "padre";
         }
+
+        public static class Mail
+        {
+            public const string Notify = "notify";
+        }
     }
 }

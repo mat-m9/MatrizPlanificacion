@@ -10,6 +10,8 @@ namespace MatrizPlanificacion.Modelos
         [Key]
         public string? ProcesoCompraId { get; set; }
 
+        public decimal? Avance { get; set; }
+
         [ForeignKey("IdProcesoCompra")]
         public ICollection<Preparatoria>? Preparatorias { get; set; }
 
