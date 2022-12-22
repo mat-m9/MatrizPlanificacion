@@ -160,6 +160,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+PopulateDB.Initialize(app.Services);
+
 app.UseAuthentication();
 app.UseAuthorization();
 

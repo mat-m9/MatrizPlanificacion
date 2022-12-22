@@ -24,6 +24,8 @@ namespace MatrizPlanificacion
         public virtual DbSet<ProcedimientoContratacion> ProcedimientoContrataciones { get; set; } = null!;
         public virtual DbSet<ProcesoCompra> ProcesoCompras { get; set; } = null!;
         public virtual DbSet<User> Usuarios { get; set; } = null!;
+        public virtual DbSet<ItemPresupuestario> ItemsPresup { get; set; } = null;
+        public virtual DbSet<Sectores> sectores { get; set; } = null!;
 //
         public virtual DbSet<FechaReasignacionIda> FechaReasignacionIdas { get; set; } = null!;
         public virtual DbSet<FechaReasignacionVuelta> FechaReasignacionVueltas { get; set; } = null!;
@@ -43,7 +45,6 @@ namespace MatrizPlanificacion
             builder.Entity<Contractual>()
                 .HasIndex(x => x.IdPrecontractual)
                 .IsUnique();
-
 
             //Generación uuid tablas modelo
             builder.Entity<AlertaDSPPP>(o =>
@@ -103,6 +104,16 @@ namespace MatrizPlanificacion
 
             builder.Entity<ProcesoCompra>(o =>
                 o.Property(x => x.ProcesoCompraId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<ItemPresupuestario>(o =>
+                o.Property(x => x.itemId)
+                .HasDefaultValue("uuid_generate_v4()")
+                .ValueGeneratedOnAdd());
+
+            builder.Entity<Sectores>(o =>
+                o.Property(x => x.sectorId)
                 .HasDefaultValue("uuid_generate_v4()")
                 .ValueGeneratedOnAdd());
 

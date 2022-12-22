@@ -39,11 +39,6 @@ namespace MatrizPlanificacion.Modelos
         public PlantaUnidadArea? Planta { get; set; }
 
         [Required]
-        [Display(Name = "Nro. Proceso")]
-        [RegularExpression("([1-9][0-9]*)")]
-        public string numProceso { get; set; }
-
-        [Required]
         public string cpc { get; set; }
 
         [Required]

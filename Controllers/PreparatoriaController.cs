@@ -1,4 +1,5 @@
 ﻿using MatrizPlanificacion.Modelos;
+using MatrizPlanificacion.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,14 +40,26 @@ namespace MatrizPlanificacion.Controllers
         {
             try
             {
-                preparatoria.fechaProgramada = DateTime.SpecifyKind(preparatoria.fechaProgramada.Value, DateTimeKind.Utc);
-                preparatoria.fechaSolicitud = DateTime.SpecifyKind(preparatoria.fechaSolicitud.Value, DateTimeKind.Utc);
-                preparatoria.fechaRespuesta = DateTime.SpecifyKind(preparatoria.fechaRespuesta.Value, DateTimeKind.Utc);
-                preparatoria.fechaMesa = DateTime.SpecifyKind(preparatoria.fechaMesa.Value, DateTimeKind.Utc);
-                preparatoria.fechaEmision = DateTime.SpecifyKind(preparatoria.fechaEmision.Value, DateTimeKind.Utc);
-                preparatoria.fechaReal = DateTime.SpecifyKind(preparatoria.fechaReal.Value, DateTimeKind.Utc);
-                preparatoria.fechaAutorizacion = DateTime.SpecifyKind(preparatoria.fechaAutorizacion.Value, DateTimeKind.Utc);
-                preparatoria.fechaPublicacion = DateTime.SpecifyKind(preparatoria.fechaPublicacion.Value, DateTimeKind.Utc);
+                preparatoria.informeNecesidad = DateTime.SpecifyKind(preparatoria.informeNecesidad.Value, DateTimeKind.Utc);
+                preparatoria.terminosReferencia = DateTime.SpecifyKind(preparatoria.terminosReferencia.Value, DateTimeKind.Utc);
+                preparatoria.solicitudPublicacion = DateTime.SpecifyKind(preparatoria.solicitudPublicacion.Value, DateTimeKind.Utc);
+                preparatoria.publicacionNecesidad = DateTime.SpecifyKind(preparatoria.publicacionNecesidad.Value, DateTimeKind.Utc);
+
+
+                preparatoria.recepcionCotizaciones = DateTime.SpecifyKind(preparatoria.recepcionCotizaciones.Value, DateTimeKind.Utc);
+                preparatoria.elaboracionEstudioMercado = DateTime.SpecifyKind(preparatoria.elaboracionEstudioMercado.Value, DateTimeKind.Utc);
+                preparatoria.solicitudPAPP = DateTime.SpecifyKind(preparatoria.solicitudPAPP.Value, DateTimeKind.Utc);
+                preparatoria.emisionPAPP = DateTime.SpecifyKind(preparatoria.emisionPAPP.Value, DateTimeKind.Utc);
+
+                preparatoria.solicitudPresup = DateTime.SpecifyKind(preparatoria.solicitudPresup.Value, DateTimeKind.Utc);
+                preparatoria.emisionPresup = DateTime.SpecifyKind(preparatoria.emisionPresup.Value, DateTimeKind.Utc);
+                preparatoria.solicitudPAC = DateTime.SpecifyKind(preparatoria.solicitudPAC.Value, DateTimeKind.Utc);
+                preparatoria.emisionPAC = DateTime.SpecifyKind(preparatoria.emisionPAC.Value, DateTimeKind.Utc);
+
+                preparatoria.solicitudCoordinadorZonal = DateTime.SpecifyKind(preparatoria.solicitudCoordinadorZonal.Value, DateTimeKind.Utc);
+                preparatoria.resolucionInicio = DateTime.SpecifyKind(preparatoria.resolucionInicio.Value, DateTimeKind.Utc);
+                preparatoria.publicacionProceso = DateTime.SpecifyKind(preparatoria.publicacionProceso.Value, DateTimeKind.Utc);
+              
                 var created = context.Preparatorias.Add(preparatoria);
                 await context.SaveChangesAsync();
                 return CreatedAtAction("GetPreparatoria", new { id = preparatoria.PreparatoriaId }, created.Entity);
@@ -60,6 +73,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpPut("id")]
         public async Task<ActionResult> Put(string id, Preparatoria preparatoria)
         {
+            ProgressService progress = new ProgressService(context);
             var existe = await Existe(id);
 
             if (!existe)
@@ -68,15 +82,53 @@ namespace MatrizPlanificacion.Controllers
             preparatoria.PreparatoriaId = id;
             try
             {
-                preparatoria.fechaProgramada = DateTime.SpecifyKind(preparatoria.fechaProgramada.Value, DateTimeKind.Utc);
-                preparatoria.fechaSolicitud = DateTime.SpecifyKind(preparatoria.fechaSolicitud.Value, DateTimeKind.Utc);
-                preparatoria.fechaRespuesta = DateTime.SpecifyKind(preparatoria.fechaRespuesta.Value, DateTimeKind.Utc);
-                preparatoria.fechaMesa = DateTime.SpecifyKind(preparatoria.fechaMesa.Value, DateTimeKind.Utc);
-                preparatoria.fechaEmision = DateTime.SpecifyKind(preparatoria.fechaEmision.Value, DateTimeKind.Utc);
-                preparatoria.fechaReal = DateTime.SpecifyKind(preparatoria.fechaReal.Value, DateTimeKind.Utc);
-                preparatoria.fechaAutorizacion = DateTime.SpecifyKind(preparatoria.fechaAutorizacion.Value, DateTimeKind.Utc);
-                preparatoria.fechaPublicacion = DateTime.SpecifyKind(preparatoria.fechaPublicacion.Value, DateTimeKind.Utc);
+                preparatoria.informeNecesidad = DateTime.SpecifyKind(preparatoria.informeNecesidad.Value, DateTimeKind.Utc);
+                if(preparatoria.informeNecesidadReal != null)
+                    preparatoria.informeNecesidadReal = DateTime.SpecifyKind(preparatoria.informeNecesidadReal.Value, DateTimeKind.Utc);
+                preparatoria.terminosReferencia = DateTime.SpecifyKind(preparatoria.terminosReferencia.Value, DateTimeKind.Utc);
+                if(preparatoria.terminosReferenciaReal!= null)
+                    preparatoria.terminosReferenciaReal = DateTime.SpecifyKind(preparatoria.terminosReferenciaReal.Value, DateTimeKind.Utc);
+                preparatoria.solicitudPublicacion = DateTime.SpecifyKind(preparatoria.solicitudPublicacion.Value, DateTimeKind.Utc);
+                if(preparatoria.solicitudPublicacionReal != null)
+                    preparatoria.solicitudPublicacionReal = DateTime.SpecifyKind(preparatoria.solicitudPublicacionReal.Value, DateTimeKind.Utc);
+                preparatoria.publicacionNecesidad = DateTime.SpecifyKind(preparatoria.publicacionNecesidad.Value, DateTimeKind.Utc);
+                if(preparatoria.publicacionNecesidadReal!= null)
+                    preparatoria.publicacionNecesidadReal = DateTime.SpecifyKind(preparatoria.publicacionNecesidadReal.Value, DateTimeKind.Utc);
+                preparatoria.recepcionCotizaciones = DateTime.SpecifyKind(preparatoria.recepcionCotizaciones.Value, DateTimeKind.Utc);
+                if(preparatoria.recepcionCotizacionesReal!= null)
+                    preparatoria.recepcionCotizacionesReal = DateTime.SpecifyKind(preparatoria.recepcionCotizacionesReal.Value, DateTimeKind.Utc);
+                preparatoria.elaboracionEstudioMercado = DateTime.SpecifyKind(preparatoria.elaboracionEstudioMercado.Value, DateTimeKind.Utc);
+                if(preparatoria.elaboracionEstudioMercadoReal != null)
+                    preparatoria.elaboracionEstudioMercadoReal = DateTime.SpecifyKind(preparatoria.elaboracionEstudioMercadoReal.Value, DateTimeKind.Utc);
+                preparatoria.solicitudPAPP = DateTime.SpecifyKind(preparatoria.solicitudPAPP.Value, DateTimeKind.Utc);
+                if(preparatoria.solicitudPAPPReal!= null)
+                    preparatoria.solicitudPAPPReal = DateTime.SpecifyKind(preparatoria.solicitudPAPPReal.Value, DateTimeKind.Utc);
+                preparatoria.emisionPAPP = DateTime.SpecifyKind(preparatoria.emisionPAPP.Value, DateTimeKind.Utc);
+                if(preparatoria.emisionPAPPReal!= null)
+                    preparatoria.emisionPAPPReal = DateTime.SpecifyKind(preparatoria.emisionPAPPReal.Value, DateTimeKind.Utc);
+                preparatoria.solicitudPresup = DateTime.SpecifyKind(preparatoria.solicitudPresup.Value, DateTimeKind.Utc);
+                if(preparatoria.solicitudPresupReal != null)
+                    preparatoria.solicitudPresupReal = DateTime.SpecifyKind(preparatoria.solicitudPresupReal.Value, DateTimeKind.Utc);
+                preparatoria.emisionPresup = DateTime.SpecifyKind(preparatoria.emisionPresup.Value, DateTimeKind.Utc);
+                if(preparatoria.emisionPresupReal != null)
+                    preparatoria.emisionPresupReal = DateTime.SpecifyKind(preparatoria.emisionPresupReal.Value, DateTimeKind.Utc);
+                preparatoria.solicitudPAC = DateTime.SpecifyKind(preparatoria.solicitudPAC.Value, DateTimeKind.Utc);
+                if(preparatoria.solicitudPACReal!= null)
+                    preparatoria.solicitudPACReal = DateTime.SpecifyKind(preparatoria.solicitudPACReal.Value, DateTimeKind.Utc);
+                preparatoria.emisionPAC = DateTime.SpecifyKind(preparatoria.emisionPAC.Value, DateTimeKind.Utc);
+                if (preparatoria.emisionPACReal != null)
+                    preparatoria.emisionPACReal = DateTime.SpecifyKind(preparatoria.emisionPACReal.Value, DateTimeKind.Utc);
+                preparatoria.solicitudCoordinadorZonal = DateTime.SpecifyKind(preparatoria.solicitudCoordinadorZonal.Value, DateTimeKind.Utc);
+                if(preparatoria.solicitudCoordinadorZonalReal != null)
+                    preparatoria.solicitudCoordinadorZonalReal = DateTime.SpecifyKind(preparatoria.solicitudCoordinadorZonalReal.Value, DateTimeKind.Utc);
+                preparatoria.resolucionInicio = DateTime.SpecifyKind(preparatoria.resolucionInicio.Value, DateTimeKind.Utc);
+                if(preparatoria.resolucionInicioReal != null)
+                    preparatoria.resolucionInicioReal = DateTime.SpecifyKind(preparatoria.resolucionInicioReal.Value, DateTimeKind.Utc);
+                preparatoria.publicacionProceso = DateTime.SpecifyKind(preparatoria.publicacionProceso.Value, DateTimeKind.Utc);
+                if(preparatoria.publicacionProcesoReal!= null)
+                preparatoria.publicacionProcesoReal = DateTime.SpecifyKind(preparatoria.publicacionProcesoReal.Value, DateTimeKind.Utc);
                 context.Preparatorias.Update(preparatoria);
+
                 await context.SaveChangesAsync();
                 return NoContent();
             }

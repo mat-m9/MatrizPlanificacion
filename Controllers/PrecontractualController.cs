@@ -1,4 +1,5 @@
 ﻿using MatrizPlanificacion.Modelos;
+using MatrizPlanificacion.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +40,12 @@ namespace MatrizPlanificacion.Controllers
         {
             try
             {
-                precontractual.fechaAdjudicacion = DateTime.SpecifyKind(precontractual.fechaAdjudicacion.Value, DateTimeKind.Utc);
+                precontractual.preguntasRespuestas = DateTime.SpecifyKind(precontractual.preguntasRespuestas.Value, DateTimeKind.Utc);
+                precontractual.recepcionOfertas = DateTime.SpecifyKind(precontractual.recepcionOfertas.Value, DateTimeKind.Utc);
+                precontractual.calificacionOfertas = DateTime.SpecifyKind(precontractual.calificacionOfertas.Value, DateTimeKind.Utc);
+                precontractual.pujaNegociacion = DateTime.SpecifyKind(precontractual.pujaNegociacion.Value, DateTimeKind.Utc);
+                precontractual.adjudicacion = DateTime.SpecifyKind(precontractual.adjudicacion.Value, DateTimeKind.Utc);
+
                 var created = context.Precontractuales.Add(precontractual);
                 await context.SaveChangesAsync();
                 return CreatedAtAction("GetPrecontractual", new { id = precontractual.IdPrecontractual }, created.Entity);
@@ -53,6 +59,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpPut("id")]
         public async Task<ActionResult> Put(string id, Precontractual precontractual)
         {
+            ProgressService progress = new ProgressService(context);
             var existe = await Existe(id);
 
             if (!existe)
@@ -61,8 +68,23 @@ namespace MatrizPlanificacion.Controllers
             precontractual.IdPrecontractual = id;
             try
             {
-                precontractual.fechaAdjudicacion = DateTime.SpecifyKind(precontractual.fechaAdjudicacion.Value, DateTimeKind.Utc);
+                precontractual.preguntasRespuestas = DateTime.SpecifyKind(precontractual.preguntasRespuestas.Value, DateTimeKind.Utc);
+                if(precontractual.preguntasRespuestasReal != null)
+                    precontractual.preguntasRespuestasReal = DateTime.SpecifyKind(precontractual.preguntasRespuestasReal.Value, DateTimeKind.Utc);
+                precontractual.recepcionOfertas = DateTime.SpecifyKind(precontractual.recepcionOfertas.Value, DateTimeKind.Utc);
+                if(precontractual.recepcionOfertasReal != null)
+                    precontractual.recepcionOfertasReal = DateTime.SpecifyKind(precontractual.recepcionOfertasReal.Value, DateTimeKind.Utc);
+                precontractual.calificacionOfertas = DateTime.SpecifyKind(precontractual.calificacionOfertas.Value, DateTimeKind.Utc);
+                if(precontractual.calificacionOfertasReal != null)
+                    precontractual.calificacionOfertasReal = DateTime.SpecifyKind(precontractual.calificacionOfertasReal.Value, DateTimeKind.Utc);
+                precontractual.pujaNegociacion = DateTime.SpecifyKind(precontractual.pujaNegociacion.Value, DateTimeKind.Utc);
+                if(precontractual.pujaNegociacionReal != null)
+                    precontractual.pujaNegociacionReal = DateTime.SpecifyKind(precontractual.pujaNegociacionReal.Value, DateTimeKind.Utc);
+                precontractual.adjudicacion = DateTime.SpecifyKind(precontractual.adjudicacion.Value, DateTimeKind.Utc);
+                if(precontractual.adjudicacionReal != null)
+                    precontractual.adjudicacionReal = DateTime.SpecifyKind(precontractual.adjudicacionReal.Value, DateTimeKind.Utc);
                 context.Precontractuales.Update(precontractual);
+
                 await context.SaveChangesAsync();
                 return NoContent();
             }

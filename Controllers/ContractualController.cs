@@ -1,4 +1,5 @@
 ﻿using MatrizPlanificacion.Modelos;
+using MatrizPlanificacion.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +41,6 @@ namespace MatrizPlanificacion.Controllers
             try
             {
                 contractual.fechaSuscripcion = DateTime.SpecifyKind(contractual.fechaSuscripcion.Value, DateTimeKind.Utc);
-                contractual.fechaFinalizacion = DateTime.SpecifyKind(contractual.fechaFinalizacion.Value, DateTimeKind.Utc);
                 var created = context.Contractuales.Add(contractual);
                 await context.SaveChangesAsync();
                 return CreatedAtAction("GetContractual", new { id = contractual.ContractualId }, created.Entity);
@@ -55,6 +55,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpPut("id")]
         public async Task<ActionResult> Put(string id, Contractual contractual)
         {
+            ProgressService progress = new ProgressService(context);
             var existe = await Existe(id);
 
             if (!existe)
@@ -64,8 +65,10 @@ namespace MatrizPlanificacion.Controllers
             try
             {
                 contractual.fechaSuscripcion = DateTime.SpecifyKind(contractual.fechaSuscripcion.Value, DateTimeKind.Utc);
-                contractual.fechaFinalizacion = DateTime.SpecifyKind(contractual.fechaFinalizacion.Value, DateTimeKind.Utc);
+                if(contractual.fechaSuscripcionReal != null)
+                    contractual.fechaSuscripcionReal = DateTime.SpecifyKind(contractual.fechaSuscripcionReal.Value, DateTimeKind.Utc);
                 context.Contractuales.Update(contractual);
+
                 await context.SaveChangesAsync();
                 return NoContent();
             }
