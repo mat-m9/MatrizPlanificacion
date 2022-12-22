@@ -72,6 +72,8 @@ namespace MatrizPlanificacion.Modelos
         [Display(Name = "Mes Planificado")]
         public string mesPlanificado { get; set; }
 
+        public string? sectorOpcional { get; set; }
+
 
         public ICollection<AlertaDSPPP>? AlertasDSPPP { get; set; }
         public ICollection<Observacion>? Observaciones { get; set; }
