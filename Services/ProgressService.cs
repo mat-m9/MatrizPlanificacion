@@ -6,11 +6,7 @@ namespace MatrizPlanificacion.Services
     public class ProgressService
     {
         private readonly DatabaseContext context;
-
-        private int totalPasosPreparatoria = 15;
-        private int totalPasosPrecontractual = 5;
-        private int totalPasosContractual = 2;
-        private int totalPasosProgreso = 22;
+        DefaultProgressValues progressValues = new DefaultProgressValues();
 
         public ProgressService(DatabaseContext context)
         {
@@ -38,7 +34,7 @@ namespace MatrizPlanificacion.Services
             if (preparatoria.resolucionInicioReal != null) countAvance++;
             if (preparatoria.publicacionProcesoReal != null) countAvance++;
 
-            avance = (countAvance * 100) / totalPasosProgreso;
+            avance = (countAvance * 100) / progressValues.TotalPasos;
             avance = Math.Round(avance, 2);
 
             ProcesoCompra proceso = await context.ProcesoCompras.FindAsync(preparatoria.IdProcesoCompra);
@@ -59,13 +55,13 @@ namespace MatrizPlanificacion.Services
             if (precontractual.pujaNegociacionReal != null) countAvance++;
             if (precontractual.adjudicacionReal != null) countAvance++;
 
-            avance = (countAvance * 100) / totalPasosProgreso;
+            avance = (countAvance * 100) / progressValues.TotalPasos;
             avance = Math.Round(avance, 2);
 
             Preparatoria preparatoria = await context.Preparatorias.FindAsync(precontractual.IdPreparatoria);
             ProcesoCompra proceso = await context.ProcesoCompras.FindAsync(preparatoria.IdProcesoCompra);
 
-            proceso.Avance = avance + 68;
+            proceso.Avance = avance + progressValues.TotalAvancePreparatoria;
 
             context.ProcesoCompras.Update(proceso);
 
@@ -80,14 +76,14 @@ namespace MatrizPlanificacion.Services
             if (contractual.fechaSuscripcionReal != null) countAvance++;
             if (contractual.fechaFinalizacionReal != null) countAvance++;
 
-            avance = (countAvance * 100) / totalPasosProgreso;
+            avance = (countAvance * 100) / progressValues.TotalPasos;
             avance = Math.Round(avance, 2);
 
             Precontractual precontractual = await context.Precontractuales.FindAsync(contractual.IdPrecontractual);
             Preparatoria preparatoria = await context.Preparatorias.FindAsync(precontractual.IdPreparatoria);
             ProcesoCompra proceso = await context.ProcesoCompras.FindAsync(preparatoria.IdProcesoCompra);
 
-            proceso.Avance = avance + 91;
+            proceso.Avance = avance + progressValues.TotalAvancePrecontractual;
 
             context.ProcesoCompras.Update(proceso);
 
