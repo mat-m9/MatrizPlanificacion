@@ -22,38 +22,30 @@ namespace MatrizPlanificacion.Controllers
         {
             if(request.planta != null)
             {
-                if (!request.planta.tipo.Equals(null))
+                if (!ModelState.IsValid)
                 {
-                    if (request.planta.tipo == 'A')
+                    return BadRequest(new AuthFailedResponse
                     {
-                        if (!ModelState.IsValid)
-                        {
-                            return BadRequest(new AuthFailedResponse
-                            {
-                                Errors = ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage))
-                            });
-                        }
-
-                        var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.rol, request.planta);
-
-
-                        if (!authResponse.Success)
-                        {
-                            return BadRequest(new AuthFailedResponse
-                            {
-                                Errors = authResponse.Errors
-                            }); ;
-                        }
-
-                        return Ok(new AuthSuccessResponse
-                        {
-                            Token = authResponse.Token,
-                            RefreshedToken = authResponse.RefreshToken
-                        });
-                    }
-                    return BadRequest();
+                        Errors = ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage))
+                    });
                 }
-                return BadRequest();
+
+                var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.rol, request.planta);
+
+
+                if (!authResponse.Success)
+                {
+                    return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = authResponse.Errors
+                    }); ;
+                }
+
+                return Ok(new AuthSuccessResponse
+                {
+                    Token = authResponse.Token,
+                    RefreshedToken = authResponse.RefreshToken
+                });
             }   
             return BadRequest();
         }
@@ -96,6 +88,13 @@ namespace MatrizPlanificacion.Controllers
                 Token = authResponse.Token,
                 RefreshedToken = authResponse.RefreshToken
             });
+        }
+
+        [HttpPut(ApiRoutes.Identity.Change)]
+        public async Task<IActionResult> ChangePassWord([FromBody] ChangePasswordRequest changePasswordRequest)
+        {
+            await _identityService.ChangePassword(changePasswordRequest.UserName, changePasswordRequest.OldPassword, changePasswordRequest.NewPassword);
+            return NoContent();
         }
     }
 

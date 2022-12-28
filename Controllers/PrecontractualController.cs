@@ -86,6 +86,7 @@ namespace MatrizPlanificacion.Controllers
                 context.Precontractuales.Update(precontractual);
 
                 await context.SaveChangesAsync();
+                await progress.ProgresoPreContractual(precontractual);
                 return NoContent();
             }
             catch (Exception ex)

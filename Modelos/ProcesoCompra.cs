@@ -10,7 +10,7 @@ namespace MatrizPlanificacion.Modelos
         [Key]
         public string? ProcesoCompraId { get; set; }
 
-        [Column(TypeName = "decimal(3,2)")]
+        //[Column(TypeName = "decimal(3,2)")]
         public decimal? Avance { get; set; }
 
         [ForeignKey("IdProcesoCompra")]
@@ -36,7 +36,7 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         [ForeignKey("PlantaId")]
         public string PlantaId { get; set; }
-        public PlantaUnidadArea? Planta { get; set; }
+        public Unidad? Planta { get; set; }
 
         [Required]
         public string cpc { get; set; }

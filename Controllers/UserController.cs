@@ -42,18 +42,6 @@ namespace MatrizPlanificacion.Controllers
             return Ok(user);
         }
 
-        [HttpPut("id")]
-        public async Task<ActionResult<ICollection<User>>> ChangePassword(string userId, string password)
-        {
-            var user = await userManager.FindByIdAsync(userId);
-            await userManager.RemovePasswordAsync(user);
-            await userManager.AddPasswordAsync(user, password);
-
-            await context.SaveChangesAsync();
-
-            return Ok(user);
-        }
-
 
         [HttpDelete("id")]
         public async Task<ActionResult> Delete(string id)

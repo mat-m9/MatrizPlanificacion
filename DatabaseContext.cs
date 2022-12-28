@@ -18,15 +18,14 @@ namespace MatrizPlanificacion
         public virtual DbSet<Estado> Estados { get; set; } = null!;
         public virtual DbSet<Etapa> Etapas { get; set; } = null!;
         public virtual DbSet<Observacion> Observaciones { get; set; } = null!;
-        public virtual DbSet<PlantaUnidadArea> PlantaUnidadAreas { get; set; } = null!;
+        public virtual DbSet<Unidad> PlantaUnidadAreas { get; set; } = null!;
         public virtual DbSet<Precontractual> Precontractuales { get; set; } = null!;
         public virtual DbSet<Preparatoria> Preparatorias { get; set; } = null!;
         public virtual DbSet<ProcedimientoContratacion> ProcedimientoContrataciones { get; set; } = null!;
         public virtual DbSet<ProcesoCompra> ProcesoCompras { get; set; } = null!;
         public virtual DbSet<User> Usuarios { get; set; } = null!;
         public virtual DbSet<ItemPresupuestario> ItemsPresup { get; set; } = null;
-        public virtual DbSet<Sectores> sectores { get; set; } = null!;
-//
+
         public virtual DbSet<FechaReasignacionIda> FechaReasignacionIdas { get; set; } = null!;
         public virtual DbSet<FechaReasignacionVuelta> FechaReasignacionVueltas { get; set; } = null!;
 
@@ -82,8 +81,8 @@ namespace MatrizPlanificacion
                 .HasDefaultValue("uuid_generate_v4()")
                 .ValueGeneratedOnAdd());
 
-            builder.Entity<PlantaUnidadArea>(o =>
-                o.Property(x => x.PlantaUnidadAreaId)
+            builder.Entity<Unidad>(o =>
+                o.Property(x => x.UnidadId)
                 .HasDefaultValue("uuid_generate_v4()")
                 .ValueGeneratedOnAdd());
 
@@ -111,12 +110,6 @@ namespace MatrizPlanificacion
                 o.Property(x => x.itemId)
                 .HasDefaultValue("uuid_generate_v4()")
                 .ValueGeneratedOnAdd());
-
-            builder.Entity<Sectores>(o =>
-                o.Property(x => x.sectorId)
-                .HasDefaultValue("uuid_generate_v4()")
-                .ValueGeneratedOnAdd());
-
 
             base.OnModelCreating(builder);
         }

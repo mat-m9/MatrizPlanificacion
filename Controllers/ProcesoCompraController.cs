@@ -37,6 +37,36 @@ namespace MatrizPlanificacion.Controllers
             return Ok(proceso);
         }
 
+        [HttpGet(template: ApiRoutes.Proceso.Etapa)]
+        public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoEtapa(string idEtapa)
+        {
+            var proceso = await context.ProcesoCompras.Where(e => e.EtapaId.Equals(idEtapa)).Include(p => p.Planta).Include(p => p.Preparatorias)
+                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).FirstOrDefaultAsync();
+            if (proceso == null)
+                return NotFound();
+            return Ok(proceso);
+        }
+
+        [HttpGet(template: ApiRoutes.Proceso.Estado)]
+        public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoEstado(string idEstado)
+        {
+            var proceso = await context.ProcesoCompras.Where(e => e.EstadoId.Equals(idEstado)).Include(p => p.Planta).Include(p => p.Preparatorias)
+                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).FirstOrDefaultAsync();
+            if (proceso == null)
+                return NotFound();
+            return Ok(proceso);
+        }
+
+        [HttpGet(template: ApiRoutes.Proceso.Area)]
+        public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoArea(string idArea)
+        {
+            var proceso = await context.ProcesoCompras.Where(e => e.PlantaId.Equals(idArea)).Include(p => p.Planta).Include(p => p.Preparatorias)
+                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).FirstOrDefaultAsync();
+            if (proceso == null)
+                return NotFound();
+            return Ok(proceso);
+        }
+
         [HttpPost]
         public async Task<ActionResult<string>> Post(ProcesoCompra procesoCompra)
         {

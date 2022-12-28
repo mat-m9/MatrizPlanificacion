@@ -10,7 +10,7 @@ namespace MatrizPlanificacion.Modelos
         
 
         [Required]
-        [StringLength(20)]
+        [StringLength(32)]
         public string tipoProcedimiento { get; set; }
 
         public ICollection<ProcesoCompra>? ProcesoCompra { get; set; }

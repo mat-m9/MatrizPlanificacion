@@ -41,6 +41,7 @@ namespace MatrizPlanificacion.Controllers
             try
             {
                 contractual.fechaSuscripcion = DateTime.SpecifyKind(contractual.fechaSuscripcion.Value, DateTimeKind.Utc);
+                contractual.fechaFinalizacion = DateTime.SpecifyKind(contractual.fechaFinalizacion.Value, DateTimeKind.Utc);
                 var created = context.Contractuales.Add(contractual);
                 await context.SaveChangesAsync();
                 return CreatedAtAction("GetContractual", new { id = contractual.ContractualId }, created.Entity);
@@ -67,9 +68,13 @@ namespace MatrizPlanificacion.Controllers
                 contractual.fechaSuscripcion = DateTime.SpecifyKind(contractual.fechaSuscripcion.Value, DateTimeKind.Utc);
                 if(contractual.fechaSuscripcionReal != null)
                     contractual.fechaSuscripcionReal = DateTime.SpecifyKind(contractual.fechaSuscripcionReal.Value, DateTimeKind.Utc);
+                contractual.fechaFinalizacion = DateTime.SpecifyKind(contractual.fechaFinalizacion.Value, DateTimeKind.Utc);
+                if (contractual.fechaFinalizacionReal != null)
+                    contractual.fechaFinalizacionReal = DateTime.SpecifyKind(contractual.fechaFinalizacionReal.Value, DateTimeKind.Utc);
                 context.Contractuales.Update(contractual);
 
                 await context.SaveChangesAsync();
+                await progress.ProgresoContractual(contractual);
                 return NoContent();
             }
             catch (Exception ex)

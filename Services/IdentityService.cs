@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Services
             this.databaseContext = databaseContext;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, string rol, PlantaUnidadArea planta)
+        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, string rol, Unidad planta)
         {
             var existingUser = await _userManager.FindByNameAsync(userName);
             if (existingUser != null)
@@ -40,7 +40,7 @@ namespace MatrizPlanificacion.Services
             {
                 Email = email,
                 UserName = userName,
-                AreaId = planta.PlantaUnidadAreaId
+                AreaId = planta.UnidadId
 
             };
             var createdUser = await _userManager.CreateAsync(newUser, password);
@@ -191,6 +191,11 @@ namespace MatrizPlanificacion.Services
                     StringComparison.InvariantCultureIgnoreCase);
         }
 
-       
+        public async Task ChangePassword(string userName, string oldPassword, string newPassWord)
+        {
+            User tempUser = await _userManager.FindByNameAsync(userName);
+            await _userManager.ChangePasswordAsync(tempUser, oldPassword, newPassWord);
+        }
+
     }
 }

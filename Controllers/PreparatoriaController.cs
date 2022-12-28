@@ -130,6 +130,7 @@ namespace MatrizPlanificacion.Controllers
                 context.Preparatorias.Update(preparatoria);
 
                 await context.SaveChangesAsync();
+                await progress.ProgresoPreparatoria(preparatoria); 
                 return NoContent();
             }
             catch (Exception ex)

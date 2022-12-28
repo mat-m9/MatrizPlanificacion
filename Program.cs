@@ -22,6 +22,7 @@ var jwtSettings = new JwtSettings();
 builder.Configuration.Bind(key:nameof(jwtSettings), jwtSettings);
 builder.Services.AddSingleton(jwtSettings);
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddSingleton<DefaultRolesServices>();
 
 // Add services to the container.
 builder.Services.AddControllers();

@@ -31,8 +31,8 @@ namespace MatrizPlanificacion.Controllers
             this._logger = log;
             this._userManager = userManager;
         }
-        [Route("api/[controller]")]
-        [Authorize(Roles = "admin")]
+
+        //[Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<List<string>>> Get()
         {

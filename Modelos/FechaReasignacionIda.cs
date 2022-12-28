@@ -16,7 +16,7 @@ namespace MatrizPlanificacion.Modelos
         [Required]
         [ForeignKey("AreaId")]
         public string AreaId { get; set; }
-        public PlantaUnidadArea? Area { get; set; }
+        public Unidad? Area { get; set; }
 
         [Required]
         public DateTime? fechaIda { get; set; }

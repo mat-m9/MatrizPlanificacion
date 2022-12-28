@@ -10,6 +10,7 @@
             public const string Login = Base + "/Identity/login";
             public const string Register = Base + "/Identity/register";
             public const string Refresh = Base + "/Identity/refresh";
+            public const string Change = Base + "/Identity/changePassword";
         }
 
         public static class Rol
@@ -18,10 +19,11 @@
             public const string Revoke = "revoke";
         }
 
-        public static class Area
+        public static class Proceso
         {
-            public const string Tipo = "tipo";
-            public const string Padre = "padre";
+            public const string Area = "area";
+            public const string Estado = "estado";
+            public const string Etapa = "etapa";
         }
 
         public static class Mail

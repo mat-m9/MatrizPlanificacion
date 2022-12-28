@@ -19,96 +19,40 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> Get()
+        public async Task<ActionResult<ICollection<Unidad>>> Get()
         {
-            var areas = await context.PlantaUnidadAreas.Include(p => p.Padre).ToListAsync();
+            var areas = await context.PlantaUnidadAreas.ToListAsync();
             if (!areas.Any())
                 return NotFound();
             return areas;
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> GetArea(string id)
+        public async Task<ActionResult<ICollection<Unidad>>> GetArea(string id)
         {
-            var area = await context.PlantaUnidadAreas.Where(e => e.PlantaUnidadAreaId.Equals(id)).Include(p => p.Padre).FirstOrDefaultAsync();
+            var area = await context.PlantaUnidadAreas.Where(e => e.UnidadId.Equals(id)).FirstOrDefaultAsync();
             if (area == null)
                 return NotFound();
             return Ok(area);
         }
 
-        [HttpGet(template: ApiRoutes.Area.Tipo)]
-        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> Get(char tipo)
-        {
-            var areas = await context.PlantaUnidadAreas.Include(p => p.Padre).Where(p=>p.tipo == tipo) .ToListAsync();
-            if (!areas.Any())
-                return NotFound();
-            return areas;
-        }
-
-        [HttpGet(template: ApiRoutes.Area.Padre)]
-        public async Task<ActionResult<ICollection<PlantaUnidadArea>>> Get(string padreId)
-        {
-            var areas = await context.PlantaUnidadAreas.Include(p => p.Padre).Where(p => p.PadreId == padreId).ToListAsync();
-            if (!areas.Any())
-                return NotFound();
-            return areas;
-        }
-
-
         [HttpPost]
-        public async Task<ActionResult<string>> Post(PlantaUnidadArea plantaUnidadArea)
+        public async Task<ActionResult<string>> Post(Unidad plantaUnidadArea)
         {
-            if(plantaUnidadArea.tipo == 'P')
-            {
-                if(plantaUnidadArea.PadreId == null)
-                {
-                    var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
-                    await context.SaveChangesAsync();
-                    return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
-                }
-                return BadRequest();
-            }
-            if(plantaUnidadArea.tipo == 'U')
-            {
-                var padre = await context.PlantaUnidadAreas.FindAsync(plantaUnidadArea.PadreId);
-                if (padre != null) 
-                {
-                    if (padre.tipo == 'P')
-                    {
-                        var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
-                        await context.SaveChangesAsync();
-                        return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
-                    }
-                }
-                return BadRequest();
-            }
-            if(plantaUnidadArea.tipo == 'A')
-            {
-                var padre = await context.PlantaUnidadAreas.FindAsync(plantaUnidadArea.PadreId);
-                if(padre != null)
-                {
-                    if (padre.tipo == 'U')
-                    {
-                        var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
-                        await context.SaveChangesAsync();
-                        return CreatedAtAction("GetArea", new { id = plantaUnidadArea.PlantaUnidadAreaId }, created.Entity);
-                    }
-                }
-                return BadRequest();
-            }
-
-            return BadRequest();
+            var created = context.PlantaUnidadAreas.Add(plantaUnidadArea);
+            await context.SaveChangesAsync();
+            return CreatedAtAction("GetArea", new { id = plantaUnidadArea.UnidadId }, created.Entity);
         }
 
         [HttpPut("id")]
-        public async Task<ActionResult> Put(string id, PlantaUnidadArea plantaUnidadArea)
+        public async Task<ActionResult> Put(string id, Unidad plantaUnidadArea)
         {
             var existe = await Existe(id);
 
             if (!existe)
                 return NotFound();
 
-            plantaUnidadArea.PlantaUnidadAreaId = id;
+            plantaUnidadArea.UnidadId = id;
             context.PlantaUnidadAreas.Update(plantaUnidadArea);
             await context.SaveChangesAsync();
             return NoContent();
@@ -130,7 +74,7 @@ namespace MatrizPlanificacion.Controllers
 
         private async Task<bool> Existe(string id)
         {
-            return await context.PlantaUnidadAreas.AnyAsync(p => p.PlantaUnidadAreaId == id);
+            return await context.PlantaUnidadAreas.AnyAsync(p => p.UnidadId == id);
         }
     }
 }

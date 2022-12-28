@@ -17,6 +17,11 @@ namespace MatrizPlanificacion.Modelos
         public DateTime? fechaSuscripcion { get; set; }
         [DataType(DataType.Date)]
         public DateTime? fechaSuscripcionReal { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? fechaFinalizacion { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? fechaFinalizacionReal { get; set; }
     }
 }
 

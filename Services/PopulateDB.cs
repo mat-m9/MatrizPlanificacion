@@ -12,6 +12,7 @@ namespace MatrizPlanificacion.Services
             using (var scope = serviceProvider.CreateScope())
             {
                 DatabaseContext context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                DefaultRolesServices rolesServices = scope.ServiceProvider.GetRequiredService<DefaultRolesServices>();
 
                 List<string> itemsPresupuestarios = new()
                 {
@@ -25,7 +26,22 @@ namespace MatrizPlanificacion.Services
                     "570199","570201","570206","570216","570218","840103","840104","840107","840111","990101","990102"
 
                 };
-                List<string> sectores = new()
+                List<string> procedimientosContratacion = new()
+                {
+                    "CATÁLOGO ELECTRÓNICO","SUBASTA INVERSA","RÉGIMEN ESPECIAL","CONSULTORÍA CONTRATACIÓN DIRECTA",
+                    "LICITACIÓN SEGUROS","POLÍTICA BID","ÍNFIMA CUANTÍA","OTROS"
+                };
+                List<string> estados = new()
+                {
+                    "CERTIFICADO","COMPROMETIDO","DEVENGADO TOTAL","DEVENGADO PARCIAL","NINGUNO"
+
+                };
+                List<string> etapas = new()
+                {
+                    "SIN TDRS O ESPECIFICACIONES TÉCNICAS","ETAPA PREPARATORIA","ETAPA PRECONTRACTUAL","ETAPA CONTRACTUAL","FINALIZADO","CANCELADO"
+
+                };
+                List<string> unidades = new()
                 {
                     "CENTRO LOCAL BABAHOYO","CENTRO LOCAL ESMERALDAS","CENTRO LOCAL LOJA","CENTRO LOCAL MACAS",
                     "CENTRO LOCAL NUEVA LOJA","CENTRO LOCAL RIOBAMBA","CENTRO LOCAL SAN CRISTÓBAL","CENTRO LOCAL SANTO DOMINGO",
@@ -38,6 +54,20 @@ namespace MatrizPlanificacion.Services
                     "DIRECCIÓN DE ASESORÍA JURÍDICA","PROYECTO SAT"
 
                 };
+                List<string> roles = rolesServices.GetRolesList();
+                var roleStore = new RoleStore<IdentityRole>(context);
+                foreach (string role in roles)
+                {
+                    if (!context.Roles.Any(r => r.NormalizedName == role.ToUpper()))
+                    {
+                        await roleStore.CreateAsync(new()
+                        {
+                            Name = role,
+                            NormalizedName = role.ToUpper(),
+                            ConcurrencyStamp = Guid.NewGuid().ToString()
+                        });
+                    }
+                }
 
                 foreach (string item in itemsPresupuestarios)
                 {
@@ -51,14 +81,50 @@ namespace MatrizPlanificacion.Services
                         await context.SaveChangesAsync();
                     }
                 }
-                foreach (string unidad in sectores)
+                foreach (string procedimiento in procedimientosContratacion)
                 {
-                    var sector = await context.sectores.Where(i => i.sectorUnidad.Equals(unidad)).FirstOrDefaultAsync();
+                    var proc = await context.ProcedimientoContrataciones.Where(i => i.tipoProcedimiento.Equals(procedimiento)).FirstOrDefaultAsync();
+                    if (proc == null)
+                    {
+                        context.ProcedimientoContrataciones.Add(new ProcedimientoContratacion
+                        {
+                            tipoProcedimiento = procedimiento,
+                        });
+                        await context.SaveChangesAsync();
+                    }
+                }
+                foreach (string estado in estados)
+                {
+                    var est = await context.Estados.Where(i => i.tipoEstado.Equals(estado)).FirstOrDefaultAsync();
+                    if (est == null)
+                    {
+                        context.Estados.Add(new Estado
+                        {
+                            tipoEstado = estado,
+                        });
+                        await context.SaveChangesAsync();
+                    }
+                }
+                foreach (string etapa in etapas)
+                {
+                    var etapaEncontrada = await context.Etapas.Where(i => i.tipoEtapa.Equals(etapa)).FirstOrDefaultAsync();
+                    if (etapaEncontrada == null)
+                    {
+                        context.Etapas.Add(new Etapa
+                        {
+                            tipoEtapa = etapa,
+                        });
+                        await context.SaveChangesAsync();
+                    }
+                }
+                foreach (string unidad in unidades)
+                {
+                    var sector = await context.PlantaUnidadAreas.Where(i => i.nombre.Equals(unidad)).FirstOrDefaultAsync();
                     if (sector == null)
                     {
-                        context.sectores.Add(new()
+                        context.PlantaUnidadAreas.Add(new()
                         {
-                             sectorUnidad = unidad,
+                             nombre = unidad,
                         });
                         await context.SaveChangesAsync();
                     }
