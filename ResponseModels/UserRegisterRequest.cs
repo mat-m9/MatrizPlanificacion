@@ -14,6 +14,6 @@ namespace MatrizPlanificacion.ResponseModels
 
         public string rol { get; set; }
 
-        public Unidad planta { get; set; }
+        public string planta { get; set; }
     }
 }

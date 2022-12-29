@@ -26,7 +26,7 @@ namespace MatrizPlanificacion.Services
             this.databaseContext = databaseContext;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, string rol, Unidad planta)
+        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, string rol, string plantaId)
         {
             var existingUser = await _userManager.FindByNameAsync(userName);
             if (existingUser != null)
@@ -40,7 +40,7 @@ namespace MatrizPlanificacion.Services
             {
                 Email = email,
                 UserName = userName,
-                AreaId = planta.UnidadId
+                AreaId = plantaId,
 
             };
             var createdUser = await _userManager.CreateAsync(newUser, password);

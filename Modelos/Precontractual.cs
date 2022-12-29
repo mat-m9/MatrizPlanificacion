@@ -40,16 +40,3 @@ namespace MatrizPlanificacion.Modelos
         public DateTime? adjudicacionReal { get; set; }
     }
 }
-
-//[DataType(DataType.Date)]
-//public DateTime? fechaAdjudicacion { get; set; }
-//[DataType(DataType.Date)]
-//public DateTime? fechaAdjudicacionReal { get; set; }
-
-//[Required]
-//[Column(TypeName = "decimal(15,2)")]
-//[DataType(DataType.Currency)]
-//public decimal valorAdjudicado { get; set; }
-
-//[Required]
-//public string administradorContrato { get; set; }
