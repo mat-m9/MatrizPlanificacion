@@ -7,6 +7,7 @@
             {"superadmin","SUPERADMINISTRADOR" },
             {"admin","ADMINISTRADOR" },
             {"usuario","USUARIO" },
+            {"superuser", "SUPERUSUARIO" }
         };
 
         public Task<string> GetDefaultRole(string key)
