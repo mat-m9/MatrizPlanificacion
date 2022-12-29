@@ -32,6 +32,12 @@ namespace MatrizPlanificacion.Controllers
 
                 var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.rol, request.planta);
 
+
+                if (authResponse.Equals(null))
+                {
+                    return BadRequest();
+                }
+
                 return Ok(authResponse);
             }   
             return BadRequest();
