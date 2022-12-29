@@ -30,22 +30,9 @@ namespace MatrizPlanificacion.Controllers
                     });
                 }
 
-                var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.password, request.rol, request.planta);
+                var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.rol, request.planta);
 
-
-                if (!authResponse.Success)
-                {
-                    return BadRequest(new AuthFailedResponse
-                    {
-                        Errors = authResponse.Errors
-                    }); ;
-                }
-
-                return Ok(new AuthSuccessResponse
-                {
-                    Token = authResponse.Token,
-                    RefreshedToken = authResponse.RefreshToken
-                });
+                return Ok(authResponse);
             }   
             return BadRequest();
         }

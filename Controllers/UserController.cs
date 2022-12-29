@@ -1,5 +1,6 @@
 ﻿using MatrizPlanificacion.Modelos;
 using MatrizPlanificacion.ResponseModels;
+using MatrizPlanificacion.Services;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,14 @@ namespace MatrizPlanificacion.Controllers
 
         private DatabaseContext context;
         private readonly Microsoft.AspNetCore.Identity.UserManager<User> userManager;
+        private readonly PasswordGeneratorService passwordGenerator;
 
 
-        public UserController(DatabaseContext context, Microsoft.AspNetCore.Identity.UserManager<User> userManager)
+        public UserController(DatabaseContext context, Microsoft.AspNetCore.Identity.UserManager<User> userManager, PasswordGeneratorService passwordGeneratorService)
         {
             this.context = context;
             this.userManager = userManager;
+            this.passwordGenerator = passwordGeneratorService;
         }
 
         [HttpGet]
@@ -60,6 +63,18 @@ namespace MatrizPlanificacion.Controllers
         private async Task<bool> Existe(string id)
         {
             return await context.Users.AnyAsync(p => p.Id == id);
+        }
+
+        [HttpPut("id")]
+        public async Task<string> Recover (string id)
+        {
+            User tempUser = await userManager.FindByIdAsync(id);
+
+            await userManager.RemovePasswordAsync(tempUser);
+            string newPassword = await passwordGenerator.GeneratePassword();
+            await userManager.AddPasswordAsync(tempUser, newPassword);
+
+            return newPassword;
         }
     }
 }

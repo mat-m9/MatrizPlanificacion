@@ -10,8 +10,6 @@ namespace MatrizPlanificacion.ResponseModels
         [EmailAddress]
         public string email { get; set; }
 
-        public string password { get; set; }
-
         public string rol { get; set; }
 
         public string planta { get; set; }

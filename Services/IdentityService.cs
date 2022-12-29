@@ -17,24 +17,23 @@ namespace MatrizPlanificacion.Services
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly DatabaseContext databaseContext;
+        private readonly PasswordGeneratorService passwordGenerator;
 
-        public IdentityService(UserManager<User> userName, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, DatabaseContext databaseContext)
+        public IdentityService(UserManager<User> userName, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, DatabaseContext databaseContext, PasswordGeneratorService passwordGeneratorService)
         {
             _userManager = userName;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             this.databaseContext = databaseContext;
+            this.passwordGenerator = passwordGeneratorService;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(string userName, string email, string password, string rol, string plantaId)
+        public async Task<string> RegisterAsync(string userName, string email, string rol, string plantaId)
         {
             var existingUser = await _userManager.FindByNameAsync(userName);
             if (existingUser != null)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { "Ya existe un usuario con este nombre" }
-                };
+                return null;
             }
             var newUser = new User
             {
@@ -43,19 +42,19 @@ namespace MatrizPlanificacion.Services
                 AreaId = plantaId,
 
             };
+
+            string password = await passwordGenerator.GeneratePassword();
+
             var createdUser = await _userManager.CreateAsync(newUser, password);
            
             if (!createdUser.Succeeded)
             {
-                return new AuthenticationResult
-                {
-                    Errors = createdUser.Errors.Select(x => x.Description)
-                };
+                return null;
             }
             var getUser = await _userManager.FindByNameAsync(userName);
             var setRole = await _userManager.AddToRoleAsync(getUser, rol.ToUpper());
 
-            return await GenerateAthenticationResultForUserAsync(newUser);
+            return password;
         }
 
         public async  Task<AuthenticationResult> LoginAsync(string userName, string password)
