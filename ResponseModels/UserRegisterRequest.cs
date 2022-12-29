@@ -7,9 +7,6 @@ namespace MatrizPlanificacion.ResponseModels
     { 
         public string userName { get; set; }
 
-        [EmailAddress]
-        public string email { get; set; }
-
         public string rol { get; set; }
 
         public string planta { get; set; }

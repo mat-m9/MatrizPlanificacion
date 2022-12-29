@@ -28,7 +28,7 @@ namespace MatrizPlanificacion.Services
             this.passwordGenerator = passwordGeneratorService;
         }
 
-        public async Task<string> RegisterAsync(string userName, string email, string rol, string plantaId)
+        public async Task<string> RegisterAsync(string userName, string rol, string plantaId)
         {
             var existingUser = await _userManager.FindByNameAsync(userName);
             if (existingUser != null)
@@ -37,7 +37,6 @@ namespace MatrizPlanificacion.Services
             }
             var newUser = new User
             {
-                Email = email,
                 UserName = userName,
                 AreaId = plantaId,
 

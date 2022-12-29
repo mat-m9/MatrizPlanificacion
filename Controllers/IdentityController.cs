@@ -30,7 +30,7 @@ namespace MatrizPlanificacion.Controllers
                     });
                 }
 
-                var authResponse = await _identityService.RegisterAsync(request.userName, request.email, request.rol, request.planta);
+                var authResponse = await _identityService.RegisterAsync(request.userName, request.rol, request.planta);
 
 
                 if (authResponse.Equals(null))
