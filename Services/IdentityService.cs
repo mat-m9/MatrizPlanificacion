@@ -86,7 +86,7 @@ namespace MatrizPlanificacion.Services
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
             var roles = await _userManager.GetRolesAsync(newUser);
             var claims = new List<Claim>();
-
+            
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(claims: new[]
@@ -189,9 +189,9 @@ namespace MatrizPlanificacion.Services
                     StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task ChangePassword(string userName, string oldPassword, string newPassWord)
+        public async Task ChangePassword(string userId, string oldPassword, string newPassWord)
         {
-            User tempUser = await _userManager.FindByNameAsync(userName);
+            User tempUser = await _userManager.FindByIdAsync(userId);
             await _userManager.ChangePasswordAsync(tempUser, oldPassword, newPassWord);
         }
 

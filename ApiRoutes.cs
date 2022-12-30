@@ -25,10 +25,9 @@
             public const string Estado = "estado";
             public const string Etapa = "etapa";
         }
-
-        public static class Mail
+        public static class Unidad
         {
-            public const string Notify = "notify";
+            public const string Usuario = "Unidad";
         }
     }
 }

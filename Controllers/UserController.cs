@@ -66,7 +66,7 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<string> Recover (string id)
+        public async Task<GeneratedPassword> Recover (string id)
         {
             User tempUser = await userManager.FindByIdAsync(id);
 
@@ -74,7 +74,18 @@ namespace MatrizPlanificacion.Controllers
             string newPassword = await passwordGenerator.GeneratePassword();
             await userManager.AddPasswordAsync(tempUser, newPassword);
 
-            return newPassword;
+            return new GeneratedPassword
+            {
+                Password = newPassword,
+            };
+        }
+        [HttpGet(template: ApiRoutes.Unidad.Usuario)]
+        public async Task<ActionResult<ICollection<User>>> GetUserPlanta(string idPlanta)
+        {
+            var user = await context.Users.Where(e => e.AreaId.Equals(idPlanta)).Include(a => a.Area).ToListAsync();
+            if (user == null)
+                return NotFound();
+            return Ok(user);
         }
     }
 }

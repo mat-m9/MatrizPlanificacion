@@ -68,6 +68,8 @@ builder.Services.AddAuthentication(configureOptions: options =>
          options.SaveToken = true;
          options.RequireHttpsMetadata = false;
          options.TokenValidationParameters = tokenValidationParameters;
+         //options.TokenValidationParameters.NameClaimType = "sub";
+         //options.TokenValidationParameters.RoleClaimType = "role";
          options.Events = new JwtBearerEvents
          {
              OnChallenge = context =>

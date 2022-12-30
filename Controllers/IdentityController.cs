@@ -18,29 +18,29 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost(template: ApiRoutes.Identity.Register)]
-        public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
+        public async Task<GeneratedPassword> Register([FromBody] UserRegisterRequest request)
         {
             if(request.planta != null)
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new AuthFailedResponse
-                    {
-                        Errors = ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage))
-                    });
+                    return null;
                 }
 
                 var authResponse = await _identityService.RegisterAsync(request.userName, request.rol, request.planta);
 
 
-                if (authResponse.Equals(null))
+                if (authResponse==null)
                 {
-                    return BadRequest();
+                    return null;
                 }
 
-                return Ok(authResponse);
+                return new GeneratedPassword
+                {
+                    Password = authResponse,
+                };
             }   
-            return BadRequest();
+            return null;
         }
 
         [HttpPost(template: ApiRoutes.Identity.Login)]
@@ -86,7 +86,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpPut(ApiRoutes.Identity.Change)]
         public async Task<IActionResult> ChangePassWord([FromBody] ChangePasswordRequest changePasswordRequest)
         {
-            await _identityService.ChangePassword(changePasswordRequest.UserName, changePasswordRequest.OldPassword, changePasswordRequest.NewPassword);
+            await _identityService.ChangePassword(changePasswordRequest.UserId, changePasswordRequest.OldPassword, changePasswordRequest.NewPassword);
             return NoContent();
         }
     }

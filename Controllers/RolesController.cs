@@ -32,7 +32,7 @@ namespace MatrizPlanificacion.Controllers
             this._userManager = userManager;
         }
 
-        //[Authorize(Roles = "admin")]
+        //[Authorize(Roles = "SUPERADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult<List<string>>> Get()
         {
