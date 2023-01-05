@@ -61,7 +61,7 @@ namespace MatrizPlanificacion.Controllers
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoArea(string idArea)
         {
             var proceso = await context.ProcesoCompras.Where(e => e.PlantaId.Equals(idArea)).Include(p => p.Planta).Include(p => p.Preparatorias)
-                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).FirstOrDefaultAsync();
+                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).ToListAsync();
             if (proceso == null)
                 return NotFound();
             return Ok(proceso);
