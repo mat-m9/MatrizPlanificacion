@@ -41,7 +41,8 @@ namespace MatrizPlanificacion.Controllers
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoEtapa(string idEtapa)
         {
             var proceso = await context.ProcesoCompras.Where(e => e.EtapaId.Equals(idEtapa)).Include(p => p.Planta)
-                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).ToListAsync();
+                            .Include(p => p.Estado)
+                            .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
             if (proceso == null)
                 return NotFound();
             return Ok(proceso);
