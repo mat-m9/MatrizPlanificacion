@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MatrizPlanificacion.Modelos;
+using MatrizPlanificacion.Controllers;
+using MatrizPlanificacion.Modelos;
 
 namespace MatrizPlanificacion.Services
 {
@@ -69,6 +71,14 @@ namespace MatrizPlanificacion.Services
                     }
                 }
 
+                var user = new User()
+                {
+                    UserName = "administracion",
+                    NormalizedUserName = "ADMINISTRACION",
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+                var rol = await roleStore.FindByNameAsync(await rolesServices.GetDefaultRole("superadmin"));
+
                 foreach (string item in itemsPresupuestarios)
                 {
                     var itemEncontrado = await context.ItemsPresup.Where(i => i.nunItem.Equals(item)).FirstOrDefaultAsync();
@@ -128,6 +138,26 @@ namespace MatrizPlanificacion.Services
                         });
                         await context.SaveChangesAsync();
                     }
+                }
+
+
+                UserManager<User> _userManager = scope.ServiceProvider.GetService<UserManager<User>>();
+                if (!context.Users.Any(u => u.UserName == user.UserName))
+                {
+                    Unidad unidad = await context.PlantaUnidadAreas.Where(x=> x.nombre == "DIRECCIÓN ADMINISTRATIVA").FirstOrDefaultAsync();
+                    user.AreaId = unidad.UnidadId;
+
+                    var password = new PasswordHasher<User>();
+                    var hashed = password.HashPassword(user, "P!1admin");
+                    user.PasswordHash = hashed;
+                    var userStore = new UserStore<User>(context);
+                    var result = await userStore.CreateAsync(user);
+                    await _userManager.AddToRoleAsync(user, rol.NormalizedName);
+                }
+                else
+                {
+                    var user1 = await context.Users.Where(u => u.UserName == user.UserName).FirstOrDefaultAsync();
+                    await _userManager.AddToRoleAsync(user1, rol.Name);
                 }
             }
         }
