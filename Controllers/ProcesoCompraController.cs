@@ -20,7 +20,7 @@ namespace MatrizPlanificacion.Controllers
         public async Task<ActionResult<ICollection<ProcesoCompra>>> Get()
         {
             var procesos = await context.ProcesoCompras.Include(p => p.Planta).Include(p => p.Preparatorias)
-                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).Include(p => p.Estado)
+                            .Include(p => p.Estado)
                             .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
             if (!procesos.Any())
                 return NotFound();
@@ -30,7 +30,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet("id")]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProceso(string id)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.ProcesoCompraId.Equals(id)).Include(p => p.Planta).Include(p => p.Preparatorias)
+            var proceso = await context.ProcesoCompras.Where(e => e.ProcesoCompraId.Equals(id)).Include(p => p.Planta).Include(e => e.Preparatorias)
                             .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).FirstOrDefaultAsync();
             if (proceso == null)
                 return NotFound();
@@ -40,7 +40,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet(template: ApiRoutes.Proceso.Etapa)]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoEtapa(string idEtapa)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.EtapaId.Equals(idEtapa)).Include(p => p.Planta).Include(p => p.Preparatorias)
+            var proceso = await context.ProcesoCompras.Where(e => e.EtapaId.Equals(idEtapa)).Include(p => p.Planta)
                             .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).ToListAsync();
             if (proceso == null)
                 return NotFound();
@@ -50,8 +50,9 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet(template: ApiRoutes.Proceso.Estado)]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoEstado(string idEstado)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.EstadoId.Equals(idEstado)).Include(p => p.Planta).Include(p => p.Preparatorias)
-                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).ToListAsync();
+            var proceso = await context.ProcesoCompras.Where(e => e.EstadoId.Equals(idEstado)).Include(p => p.Planta)
+                            .Include(p => p.Estado)
+                            .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
             if (proceso == null)
                 return NotFound();
             return Ok(proceso);
@@ -60,8 +61,9 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet(template: ApiRoutes.Proceso.Area)]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoArea(string idArea)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.PlantaId.Equals(idArea)).Include(p => p.Planta).Include(p => p.Preparatorias)
-                            .Include(p => p.AlertasDSPPP).Include(p => p.Observaciones).ToListAsync();
+            var proceso = await context.ProcesoCompras.Where(e => e.PlantaId.Equals(idArea)).Include(p => p.Planta)
+                            .Include(p => p.Estado)
+                            .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
             if (proceso == null)
                 return NotFound();
             return Ok(proceso);
