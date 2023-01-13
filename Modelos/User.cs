@@ -9,5 +9,7 @@ namespace MatrizPlanificacion.Modelos
         public string AreaId { get; set; }
         [ForeignKey("AreaId")]
         public Unidad? Area { get; set; }
+
+        public bool needChange { get; set; } = true;
     }
 }

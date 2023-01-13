@@ -1,4 +1,5 @@
 ﻿using MatrizPlanificacion.Modelos;
+using MatrizPlanificacion.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,27 @@ namespace MatrizPlanificacion.Controllers
             var procesos = await context.ProcesoCompras.Include(p => p.Planta).Include(p => p.Preparatorias)
                             .Include(p => p.Estado)
                             .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
+            if (!procesos.Any())
+                return NotFound();
+            return procesos;
+        }
+
+        [HttpGet("ProcesoFiltro")]
+        public async Task<ActionResult<ICollection<procesoFiltro>>> GetProcesoFiltro()
+        {
+            var procesos = await context.ProcesoCompras
+                            .Include(p => p.Estado)
+                            .Include(p => p.Etapa).Include(p => p.Procedimiento).Select(a => new procesoFiltro()
+                            {
+                                IDproceso = a.ProcesoCompraId,
+                                Avance = a.Avance,
+                                Descripcion = a.descripcion,
+                                Estado = a.Estado.tipoEstado,
+                                Etapa = a.Etapa.tipoEtapa,
+                                ProcesoContra = a.Procedimiento.tipoProcedimiento,
+                                MesPlanificado = a.mesPlanificado
+
+                            }).ToListAsync();
             if (!procesos.Any())
                 return NotFound();
             return procesos;
