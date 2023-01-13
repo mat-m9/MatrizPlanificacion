@@ -37,7 +37,7 @@ namespace MatrizPlanificacion.Services
             avance = (countAvance * 100) / progressValues.TotalPasos;
             avance = Math.Round(avance, 2);
 
-            ProcesoCompra proceso = await context.ProcesoCompras.FindAsync(preparatoria.IdProcesoCompra);
+               ProcesoCompra proceso = await context.ProcesoCompras.FindAsync(preparatoria.IdProcesoCompra);
             proceso.Avance = avance;
             context.ProcesoCompras.Update(proceso);
             await context.SaveChangesAsync();
@@ -79,8 +79,8 @@ namespace MatrizPlanificacion.Services
             avance = (countAvance * 100) / progressValues.TotalPasos;
             avance = Math.Round(avance, 2);
 
-            Precontractual precontractual = await context.Precontractuales.FindAsync(contractual.IdPrecontractual);
-            Preparatoria preparatoria = await context.Preparatorias.FindAsync(precontractual.IdPreparatoria);
+
+            Preparatoria preparatoria = await context.Preparatorias.FindAsync(contractual.IdPrecontractual);
             ProcesoCompra proceso = await context.ProcesoCompras.FindAsync(preparatoria.IdProcesoCompra);
 
             proceso.Avance = avance + progressValues.TotalAvancePrecontractual;

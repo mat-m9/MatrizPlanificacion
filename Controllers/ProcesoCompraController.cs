@@ -1,6 +1,7 @@
 ﻿using MatrizPlanificacion.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static MatrizPlanificacion.ApiRoutes;
 
 namespace MatrizPlanificacion.Controllers
 {
