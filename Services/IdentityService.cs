@@ -94,7 +94,8 @@ namespace MatrizPlanificacion.Services
                     new Claim(type: JwtRegisteredClaimNames.Sub, value: newUser.UserName),
                     new Claim(type: JwtRegisteredClaimNames.Jti, value: Guid.NewGuid().ToString()),
                     new Claim(type: "id", value: newUser.Id),//para identificar al usuario del token validado ARREGLAR
-                    new Claim(type: "idArea", value: newUser.AreaId)
+                    new Claim(type: "idArea", value: newUser.AreaId),
+                    new Claim(type: "needChange", value: newUser.needChange.ToString())
 
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.TokenLifeTime),

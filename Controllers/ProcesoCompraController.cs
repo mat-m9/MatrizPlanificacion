@@ -2,6 +2,7 @@
 using MatrizPlanificacion.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using static MatrizPlanificacion.ApiRoutes;
 
 namespace MatrizPlanificacion.Controllers
@@ -63,34 +64,66 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet(template: ApiRoutes.Proceso.Etapa)]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoEtapa(string idEtapa)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.EtapaId.Equals(idEtapa)).Include(p => p.Planta)
+            var procesos = await context.ProcesoCompras
+                            .Where(e => e.EtapaId.Equals(idEtapa))
                             .Include(p => p.Estado)
-                            .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
-            if (proceso == null)
+                            .Include(p => p.Etapa).Include(p => p.Procedimiento).Select(a => new procesoFiltro()
+                            {
+                                IDproceso = a.ProcesoCompraId,
+                                Avance = a.Avance,
+                                Descripcion = a.descripcion,
+                                Estado = a.Estado.tipoEstado,
+                                Etapa = a.Etapa.tipoEtapa,
+                                ProcesoContra = a.Procedimiento.tipoProcedimiento,
+                                MesPlanificado = a.mesPlanificado
+
+                            }).ToListAsync();
+            if (!procesos.Any())
                 return NotFound();
-            return Ok(proceso);
+            return Ok(procesos);
         }
 
         [HttpGet(template: ApiRoutes.Proceso.Estado)]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoEstado(string idEstado)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.EstadoId.Equals(idEstado)).Include(p => p.Planta)
+            var procesos = await context.ProcesoCompras
+                            .Where(e => e.EstadoId.Equals(idEstado))
                             .Include(p => p.Estado)
-                            .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
-            if (proceso == null)
+                            .Include(p => p.Etapa).Include(p => p.Procedimiento).Select(a => new procesoFiltro()
+                            {
+                                IDproceso = a.ProcesoCompraId,
+                                Avance = a.Avance,
+                                Descripcion = a.descripcion,
+                                Estado = a.Estado.tipoEstado,
+                                Etapa = a.Etapa.tipoEtapa,
+                                ProcesoContra = a.Procedimiento.tipoProcedimiento,
+                                MesPlanificado = a.mesPlanificado
+
+                            }).ToListAsync();
+            if (!procesos.Any())
                 return NotFound();
-            return Ok(proceso);
+            return Ok(procesos);
         }
 
         [HttpGet(template: ApiRoutes.Proceso.Area)]
         public async Task<ActionResult<ICollection<ProcesoCompra>>> GetProcesoArea(string idArea)
         {
-            var proceso = await context.ProcesoCompras.Where(e => e.PlantaId.Equals(idArea)).Include(p => p.Planta)
-                            .Include(p => p.Estado)
-                            .Include(p => p.Etapa).Include(p => p.Procedimiento).ToListAsync();
-            if (proceso == null)
+            var procesos = await context.ProcesoCompras
+                .Where(e => e.PlantaId.Equals(idArea)).Include(p => p.Estado)
+                            .Include(p => p.Etapa).Include(p => p.Procedimiento).Select(a => new procesoFiltro()
+                            {
+                                IDproceso = a.ProcesoCompraId,
+                                Avance = a.Avance,
+                                Descripcion = a.descripcion,
+                                Estado = a.Estado.tipoEstado,
+                                Etapa = a.Etapa.tipoEtapa,
+                                ProcesoContra = a.Procedimiento.tipoProcedimiento,
+                                MesPlanificado = a.mesPlanificado
+
+                            }).ToListAsync();
+            if (!procesos.Any())
                 return NotFound();
-            return Ok(proceso);
+            return Ok(procesos);
         }
 
         [HttpPost]
