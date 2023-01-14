@@ -25,6 +25,8 @@ builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddTransient<PasswordGeneratorService>();
 builder.Services.AddSingleton<DefaultRolesServices>();
 
+builder.Services.AddSingleton<DefaultProgressValues>();
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -148,10 +150,10 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-//builder.Services.AddDbContext<DatabaseContext>(options =>
-//{
-//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-//});
+builder.Services.AddDbContext<DatabaseContextLogs>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("LogsConnection"));
+});
 
 
 

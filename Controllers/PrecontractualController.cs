@@ -1,5 +1,6 @@
 ﻿using MatrizPlanificacion.Modelos;
 using MatrizPlanificacion.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PrecontractualController : ControllerBase
     {
 

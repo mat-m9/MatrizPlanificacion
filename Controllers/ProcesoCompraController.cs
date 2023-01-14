@@ -1,5 +1,6 @@
 ﻿using MatrizPlanificacion.Modelos;
 using MatrizPlanificacion.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProcesoCompraController : ControllerBase
     {
 

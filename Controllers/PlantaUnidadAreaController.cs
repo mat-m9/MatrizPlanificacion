@@ -8,6 +8,7 @@ namespace MatrizPlanificacion.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PlantaUnidadAreaController : ControllerBase
     {
 

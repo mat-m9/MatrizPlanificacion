@@ -14,6 +14,8 @@ namespace MatrizPlanificacion.Services
             using (var scope = serviceProvider.CreateScope())
             {
                 DatabaseContext context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                DatabaseContextLogs contextLogs = scope.ServiceProvider.GetService<DatabaseContextLogs>();
+
                 DefaultRolesServices rolesServices = scope.ServiceProvider.GetRequiredService<DefaultRolesServices>();
 
                 List<string> itemsPresupuestarios = new()

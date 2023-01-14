@@ -5,7 +5,6 @@
         public static readonly Dictionary<string, string> Roles = new Dictionary<string, string>
         {
             {"superadmin","SUPERADMINISTRADOR" },
-            {"admin","ADMINISTRADOR" },
             {"usuario","USUARIO" },
             {"superuser", "SUPERUSUARIO" }
         };
