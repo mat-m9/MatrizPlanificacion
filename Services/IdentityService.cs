@@ -190,13 +190,16 @@ namespace MatrizPlanificacion.Services
                     StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task ChangePassword(string userId, string oldPassword, string newPassWord)
+        public async Task<bool> ChangePassword(string userId, string oldPassword, string newPassWord)
         {
             User tempUser = await _userManager.FindByIdAsync(userId);
             tempUser.needChange = false;
             databaseContext.Users.Update(tempUser);
             await databaseContext.SaveChangesAsync();
-            await _userManager.ChangePasswordAsync(tempUser, oldPassword, newPassWord);
+            var resp = await _userManager.ChangePasswordAsync(tempUser, oldPassword, newPassWord);
+            if (resp.Succeeded)
+                return true;
+            return false;
         }
 
     }

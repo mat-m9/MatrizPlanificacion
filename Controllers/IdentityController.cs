@@ -86,8 +86,10 @@ namespace MatrizPlanificacion.Controllers
         [HttpPut(ApiRoutes.Identity.Change)]
         public async Task<IActionResult> ChangePassWord([FromBody] ChangePasswordRequest changePasswordRequest)
         {
-            await _identityService.ChangePassword(changePasswordRequest.UserId, changePasswordRequest.OldPassword, changePasswordRequest.NewPassword);
-            return NoContent();
+            bool response = await _identityService.ChangePassword(changePasswordRequest.UserId, changePasswordRequest.OldPassword, changePasswordRequest.NewPassword);
+            if(response) 
+                return NoContent();
+            return BadRequest();
         }
     }
 
