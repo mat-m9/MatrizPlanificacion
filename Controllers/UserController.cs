@@ -31,7 +31,7 @@ namespace MatrizPlanificacion.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<User>>> Get()
         {
-            var users = await context.Users.Include(a => a.Area).ToListAsync();
+            var users = await context.Users.Include(a => a.Area).Where(u => u.NormalizedUserName != "ADMINISTRACION").ToListAsync();
             if (!users.Any())
                 return NotFound();
             return users;

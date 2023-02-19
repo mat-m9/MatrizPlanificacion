@@ -18,13 +18,13 @@ namespace MatrizPlanificacion.Controllers
         }
 
         [HttpPost(template: ApiRoutes.Identity.Register)]
-        public async Task<GeneratedPassword> Register([FromBody] UserRegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
             if(request.planta != null)
             {
                 if (!ModelState.IsValid)
                 {
-                    return null;
+                    return BadRequest();
                 }
 
                 var authResponse = await _identityService.RegisterAsync(request.userName, request.rol, request.planta);
@@ -32,15 +32,15 @@ namespace MatrizPlanificacion.Controllers
 
                 if (authResponse==null)
                 {
-                    return null;
+                    return BadRequest();
                 }
 
-                return new GeneratedPassword
+                return Ok(new GeneratedPassword
                 {
                     Password = authResponse,
-                };
+                });
             }   
-            return null;
+            return BadRequest();
         }
 
         [HttpPost(template: ApiRoutes.Identity.Login)]

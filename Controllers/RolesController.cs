@@ -37,7 +37,7 @@ namespace MatrizPlanificacion.Controllers
         public async Task<ActionResult<List<string>>> Get()
         {
             List<string> rolesString = new List<string>();
-            var roles = await _roleManager.Roles.ToListAsync();
+            var roles = await _roleManager.Roles.Where(r => r.NormalizedName != "SUPERADMINISTRADOR").ToListAsync();
             foreach (var role in roles)
             {
                 rolesString.Add(role.Name);
